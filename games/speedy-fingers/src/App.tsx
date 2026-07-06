@@ -6,8 +6,8 @@
 import { Component, createRef } from 'react';
 import { CONFIG } from './config';
 import { Sfx } from './audio';
-import { loadBoard, qualifies, saveEntry } from '@wizkidz/firebase-lb';
-import type { BoardEntry } from '@wizkidz/firebase-lb';
+import { loadBoard, qualifies, saveEntry } from '@wizkidz/leaderboard';
+import type { BoardEntry } from '@wizkidz/leaderboard';
 import { tryReadPlayerUID, tryWriteScore } from './rfid';
 import ScreenAttract from './components/ScreenAttract';
 import ScreenReaction from './components/ScreenReaction';
@@ -201,7 +201,7 @@ export default class App extends Component<Record<string, never>, AppState> {
     const ph = s.rPhase;
     const rBigText = ph === 'intro' ? 'Get ready…' : ph === 'wait' ? 'WAIT FOR IT…' : ph === 'go' ? 'GO! TAP NOW!' : ph === 'early' ? 'TOO SOON! 🙈' : s.rMs + ' ms!';
     const rSubText = ph === 'intro' ? 'Tap the big red button ONLY when the screen turns green!'
-      : ph === 'wait' ? 'Hands ready… don't tap yet!'
+      : ph === 'wait' ? "Hands ready… don't tap yet!"
       : ph === 'go' ? ''
       : ph === 'early' ? 'The rocket needs you to wait for GO!'
       : (s.rMs < 350 ? 'Lightning fast! ⚡' : s.rMs < 600 ? 'Super speedy!' : 'Great launch!');

@@ -1,13 +1,10 @@
 {
-  "name": "@wizkidz/firebase-lb",
+  "name": "@wizkidz/leaderboard",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "main": "./index.ts",
   "exports": {
     ".": "./index.ts"
-  },
-  "dependencies": {
-    "firebase": "^10.12.0"
   }
 }

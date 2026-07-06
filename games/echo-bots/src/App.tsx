@@ -9,8 +9,8 @@
 import { Component, createRef } from 'react';
 import { CONFIG } from './config';
 import { Sfx } from './audio';
-import { loadBoard, qualifies, saveEntry } from '@wizkidz/firebase-lb';
-import type { BoardEntry } from '@wizkidz/firebase-lb';
+import { loadBoard, qualifies, saveEntry } from '@wizkidz/leaderboard';
+import type { BoardEntry } from '@wizkidz/leaderboard';
 import { tryReadPlayerUID, tryWriteScore } from './rfid';
 import ScreenAttract from './components/ScreenAttract';
 import ScreenSimon from './components/ScreenSimon';

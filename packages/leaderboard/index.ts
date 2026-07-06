@@ -1,26 +1,12 @@
 /**
- * @wizkidz/firebase-lb
+ * @wizkidz/leaderboard
  *
- * Leaderboard backed by Firebase Realtime Database (free Spark plan).
- * Scoped to booth games only — does NOT touch Spark Quest or other collections.
- *
- * Config is read from Vite env vars (VITE_FIREBASE_*) so API keys are never
- * hard-coded. Falls back to localStorage when Firebase is unavailable.
+ * Booth game leaderboard, stored entirely in localStorage on the kiosk device.
+ * No server calls — all data lives on-device, per CLAUDE.md rule 3.
  *
  * RFID player UID is tagged on every score entry; it is optional so
  * anonymous plays are still recorded.
  */
-
-import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
-import {
-  getDatabase,
-  ref,
-  push,
-  query,
-  orderByChild,
-  limitToLast,
-  get,
-} from 'firebase/database';
 
 // ------------------------------------------------------------------ types
 
@@ -35,38 +21,11 @@ export interface BoardEntry {
   ts: number;
 }
 
-// ------------------------------------------------------------------ firebase init
-
-function getApp_(): FirebaseApp {
-  if (getApps().length > 0) return getApp();
-  return initializeApp({
-    apiKey:        import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain:    import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-    databaseURL:   import.meta.env.VITE_FIREBASE_DATABASE_URL,
-    projectId:     import.meta.env.VITE_FIREBASE_PROJECT_ID,
-    appId:         import.meta.env.VITE_FIREBASE_APP_ID,
-  });
-}
-
 // ------------------------------------------------------------------ public API
 
 /** Load top-5 entries for a booth game, highest score first. */
 export async function loadBoard(gameId: string): Promise<BoardEntry[]> {
-  try {
-    const db = getDatabase(getApp_());
-    const q = query(
-      ref(db, `booth-scores/${gameId}`),
-      orderByChild('s'),
-      limitToLast(5),
-    );
-    const snap = await get(q);
-    if (!snap.exists()) return localBoard(gameId);
-    const entries: BoardEntry[] = [];
-    snap.forEach(child => entries.push(child.val() as BoardEntry));
-    return entries.sort((a, b) => b.s - a.s);
-  } catch {
-    return localBoard(gameId);
-  }
+  return localBoard(gameId);
 }
 
 /** True when the score would make the top-5 leaderboard. */
@@ -95,16 +54,10 @@ export async function saveEntry(
     ts: Date.now(),
     ...(playerUID ? { uid: playerUID } : {}),
   };
-  try {
-    const db = getDatabase(getApp_());
-    await push(ref(db, `booth-scores/${gameId}`), entry);
-  } catch {
-    // Firebase unavailable — persist locally so the result screen still works
-    saveLocalEntry(gameId, entry);
-  }
+  saveLocalEntry(gameId, entry);
 }
 
-// ------------------------------------------------------------------ local fallback
+// ------------------------------------------------------------------ local storage
 
 const LOCAL_KEY = 'wizkidz-booth-lb-v2';
 

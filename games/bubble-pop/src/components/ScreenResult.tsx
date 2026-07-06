@@ -1,4 +1,4 @@
-import type { BoardEntry } from '@wizkidz/firebase-lb';
+import type { BoardEntry } from '@wizkidz/leaderboard';
 
 const BLUE   = '#0aa4eb', BLUE_D   = '#0888c4';
 const RED    = '#ff4747', RED_D    = '#e62e2e';
