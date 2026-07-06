@@ -1,5 +1,4 @@
-// Preserved from games/games/mascot-runner — made generic so any game package
-// can extend or re-use this minimal pub/sub state pattern.
+// Generic minimal pub/sub state pattern, usable by any game package.
 
 export type Difficulty = 'easy' | 'medium' | 'hard';
 

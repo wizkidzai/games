@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { MASCOTS } from '@wizkidz/mascot-system';
 import { generateUniqueID } from '@wizkidz/card-io';
 import ReaderStatus from './components/ReaderStatus';

@@ -44,9 +44,7 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
       - name: Type-check all games
-        run: |
-          pnpm --filter mascot-runner exec tsc --noEmit
-          pnpm --filter memory-game  exec tsc --noEmit
+        run: pnpm --filter "./apps/*" --filter "./games/*" exec tsc --noEmit
 
   test:
     name: Unit Tests
@@ -64,7 +62,7 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
       # --passWithNoTests keeps CI green while the test suite is still growing
-      - run: pnpm test -- --passWithNoTests
+      - run: pnpm exec vitest run --passWithNoTests
 
   build:
     name: Build Check

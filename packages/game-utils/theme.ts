@@ -1,4 +1,3 @@
-// Preserved from games/games/mascot-runner — Phaser.addThemeToggle removed.
 // Theme helpers are pure DOM / localStorage utilities, usable by any package.
 
 export type ThemeMode = 'light' | 'dark' | 'system';

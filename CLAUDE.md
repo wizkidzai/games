@@ -15,7 +15,7 @@ Before doing ANY work in this repository, read these three spec documents in ord
 ## Stack
 
 - **Runtime**: Node.js 18+, pnpm 8+
-- **Frontend**: React 18, TypeScript 5, Tailwind CSS 3
+- **Frontend**: React 19, TypeScript 5, Tailwind CSS 3
 - **Game Engine**: Phaser 3.80+
 - **Build**: Vite 5
 - **Test**: Vitest (unit), Playwright (E2E)
@@ -28,11 +28,17 @@ apps/
   booth-kiosk/          — Main kiosk app (game launcher + main menu)
   admin-card-config/    — Admin tool to configure NTAG213 RFID cards
 games/
-  memory-game/          — Sequence memory game (mascotID=1, Orchid Mantis)
+  echo-bots/            — Sequence memory game (mascotID=5, Blue Jay)
+  bubble-pop/           — True/false math game (mascotID=3, Green Frog)
+  code-cracker/         — Robot programming puzzle (mascotID=4, Yellow Fawn)
+  speedy-fingers/       — Reaction-time game (mascotID=2, Red Fox)
+  color-clash/          — STEM trivia game (mascotID=0, Peacock Pride)
 packages/
   design-system/        — CSS tokens, Tailwind colors, shared UI components
   mascot-system/        — Mascot metadata, personalities, dialogue
   card-io/              — NTAG213 RFID read/write logic
+  game-utils/           — Shared theme, input abstraction, and game-state helpers
+  leaderboard/          — On-device (localStorage) booth-game leaderboard
   analytics/            — Session tracking (30-min inactivity timeout)
   ai-models/            — Hugging Face Transformers.js wrapper
 public/

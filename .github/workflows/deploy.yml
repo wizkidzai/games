@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build games
+    name: Build kiosk and games
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,82 +42,31 @@ jobs:
             echo "marketing-assets submodule is empty or missing — skipping copy"
           fi
 
-      # Build each game — base path must match the deployed sub-directory so
-      # asset URLs resolve correctly at games.wizkidz.ai/<game-name>/.
-      - name: Build mascot-runner
-        run: pnpm --filter mascot-runner run build
+      # booth-kiosk is the site root — it fetches gameRegistry.json at runtime
+      # and links to /games/<id>/ for each game, so it's the game-selection menu.
+      - name: Build booth-kiosk
+        run: pnpm --filter booth-kiosk run build
 
-      - name: Build memory-game
-        run: pnpm --filter memory-game run build
+      # Base path must match the deployed sub-directory so asset URLs resolve
+      # correctly at games.wizkidz.ai/games/<game-id>/.
+      - name: Build games
+        run: pnpm --filter "./games/*" run build
 
       # Assemble one flat directory that GitHub Pages will serve:
-      #   /mascot-runner/   ← games/mascot-runner/dist/
-      #   /memory-game/     ← games/memory-game/dist/
-      #   /CNAME            ← tells GitHub Pages which custom domain to serve
-      #   /index.html       ← root landing page
+      #   /              ← apps/booth-kiosk/dist/ (game-selection menu)
+      #   /games/<id>/   ← games/<id>/dist/, for every game directory
+      #   /CNAME         ← tells GitHub Pages which custom domain to serve
       - name: Assemble site
         run: |
-          mkdir -p gh-pages
-          cp -r games/mascot-runner/dist  gh-pages/mascot-runner
-          cp -r games/memory-game/dist    gh-pages/memory-game
+          mkdir -p gh-pages/games
+          cp -r apps/booth-kiosk/dist/. gh-pages/
+
+          for game_dir in games/*/; do
+            game_id="$(basename "$game_dir")"
+            cp -r "$game_dir/dist" "gh-pages/games/$game_id"
+          done
 
           echo "games.wizkidz.ai" > gh-pages/CNAME
-
-          cat > gh-pages/index.html << 'HTML'
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>Wiz Kidz Games</title>
-            <style>
-              *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-              body {
-                font-family: 'Segoe UI', sans-serif;
-                background: #0d0d1a;
-                color: #fff;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 2rem;
-                padding: 2rem;
-              }
-              h1 { font-size: 2.2rem; letter-spacing: 0.04em; }
-              .subtitle { color: #ffc832; font-size: 1rem; }
-              .grid { display: flex; flex-wrap: wrap; gap: 1.2rem; justify-content: center; }
-              a {
-                display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-                padding: 1.4rem 2rem;
-                border-radius: 16px;
-                text-decoration: none;
-                font-size: 1.1rem;
-                font-weight: 700;
-                color: #fff;
-                width: 200px;
-                transition: transform 0.15s, box-shadow 0.15s;
-              }
-              a:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-              a .icon { font-size: 2.5rem; }
-              .runner  { background: #006464; }
-              .memory  { background: #6a0060; }
-            </style>
-          </head>
-          <body>
-            <h1>🎮 Wiz Kidz Games</h1>
-            <p class="subtitle">Tap a game to play!</p>
-            <div class="grid">
-              <a href="/mascot-runner/" class="runner">
-                <span class="icon">🏃</span>Mascot Runner
-              </a>
-              <a href="/memory-game/" class="memory">
-                <span class="icon">🧠</span>Memory Game
-              </a>
-            </div>
-          </body>
-          </html>
-          HTML
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

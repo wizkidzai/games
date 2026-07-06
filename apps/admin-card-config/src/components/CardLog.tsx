@@ -1,4 +1,3 @@
-import React from 'react';
 import type { CardLogEntry } from '../types';
 
 interface Props {

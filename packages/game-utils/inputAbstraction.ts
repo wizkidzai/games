@@ -1,5 +1,4 @@
-// Preserved from games/games/mascot-runner — general-purpose input abstraction
-// usable by any game package (not Phaser-specific).
+// General-purpose input abstraction, usable by any game package (not Phaser-specific).
 
 export type ActionType =
   | 'MOVE_UP'

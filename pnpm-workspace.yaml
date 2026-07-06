@@ -1,8 +1,6 @@
 packages:
   - 'apps/*'
   - 'games/*'
-  - '!games/mascot-runner'
-  - '!games/memory-game'
   - 'packages/*'
 allowBuilds:
   esbuild: true

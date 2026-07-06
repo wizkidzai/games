@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { CardData } from '@wizkidz/card-io';
 import { getMascotByID } from '@wizkidz/mascot-system';
 import type { Game } from '../types';

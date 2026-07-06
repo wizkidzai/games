@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getMascotByID } from '@wizkidz/mascot-system';
 import { SessionManager } from '@wizkidz/analytics';
 import MainMenu from './components/MainMenu';
