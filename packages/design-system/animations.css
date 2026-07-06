@@ -1,0 +1,51 @@
+/* Wiz Kidz shared keyframe animations — import alongside tokens.css */
+
+@keyframes wkFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-22px); }
+}
+
+@keyframes wkBob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%       { transform: translateY(-18px) rotate(2deg); }
+}
+
+@keyframes wkPulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.08); }
+}
+
+@keyframes wkPop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  70%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes wkShake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-16px); }
+  40%       { transform: translateX(13px); }
+  60%       { transform: translateX(-9px); }
+  80%       { transform: translateX(6px); }
+}
+
+@keyframes wkFall {
+  0%   { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(1300px) rotate(720deg); opacity: 0; }
+}
+
+@keyframes wkBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+@keyframes wkSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes wkSlideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}

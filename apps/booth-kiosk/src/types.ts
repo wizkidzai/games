@@ -3,6 +3,8 @@ export interface Game {
   name: string;
   description: string;
   mascotID: number;
+  mascotImage?: string;
+  themeColor?: string;
   ageGroups: number[];
   difficulty: ('easy' | 'medium' | 'hard')[];
   estimatedPlaytime: number;

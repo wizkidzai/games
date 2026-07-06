@@ -1,27 +1,65 @@
 {
-  "version": "1.0",
-  "lastUpdated": "2026-06-13",
+  "version": "2.0",
+  "lastUpdated": "2026-07-05",
   "games": [
     {
-      "id": "memory-game",
-      "name": "Memory Game",
-      "description": "Replay the sequence of mascots",
-      "mascotID": 1,
+      "id": "echo-bots",
+      "name": "Echo Bots",
+      "description": "Repeat the bot's light-and-sound sequence — how long can you go?",
+      "mascotID": 5,
+      "mascotImage": "/marketing-assets/mascots/jay.png",
+      "themeColor": "#0aa4eb",
+      "ageGroups": [0, 1, 2],
+      "difficulty": ["easy", "medium", "hard"],
+      "estimatedPlaytime": 90,
+      "featured": true
+    },
+    {
+      "id": "bubble-pop",
+      "name": "Bubble Pop",
+      "description": "True or false — pop the right math bubbles before time runs out!",
+      "mascotID": 3,
+      "mascotImage": "/marketing-assets/mascots/frog.png",
+      "themeColor": "#43a277",
+      "ageGroups": [0, 1, 2],
+      "difficulty": ["easy", "medium", "hard"],
+      "estimatedPlaytime": 60,
+      "featured": true
+    },
+    {
+      "id": "code-cracker",
+      "name": "Code Cracker",
+      "description": "Program a robot with Turn and Forward commands to collect the star!",
+      "mascotID": 4,
+      "mascotImage": "/marketing-assets/mascots/fawn.png",
+      "themeColor": "#ffc832",
       "ageGroups": [0, 1, 2],
       "difficulty": ["easy", "medium", "hard"],
       "estimatedPlaytime": 120,
       "featured": true
-    }
-  ,
+    },
     {
-      "id": "mascot-runner",
-      "name": "Mascot Runner",
-      "description": "Infinite side-scrolling runner — jump over obstacles and beat your score!",
-      "mascotID": 0,
-      "anyMascot": true,
+      "id": "speedy-fingers",
+      "name": "Speedy Fingers",
+      "description": "React the instant the rocket launches — fastest fingers wins!",
+      "mascotID": 2,
+      "mascotImage": "/marketing-assets/mascots/fox.png",
+      "themeColor": "#ff4747",
       "ageGroups": [0, 1, 2],
       "difficulty": ["easy", "medium", "hard"],
-      "estimatedPlaytime": 90,
+      "estimatedPlaytime": 45,
+      "featured": true
+    },
+    {
+      "id": "color-clash",
+      "name": "Color Clash",
+      "description": "Answer STEM trivia — match your answer to the right color button!",
+      "mascotID": 0,
+      "mascotImage": "/marketing-assets/mascots/peacock.png",
+      "themeColor": "#006464",
+      "ageGroups": [0, 1, 2],
+      "difficulty": ["easy", "medium", "hard"],
+      "estimatedPlaytime": 60,
       "featured": true
     }
   ]

@@ -1,23 +1,88 @@
-/* Wiz Kidz Design System — CSS Custom Properties */
+/* ============================================================
+   Wiz Kidz Design System — CSS Custom Properties
+   Updated to Outfit + Nunito (from wizkidzboothgames handoff).
+   Legacy aliases kept at the bottom for booth-kiosk compat.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
 
 :root {
-  /* Primary Colors */
-  --color-primary-teal: #006464;
-  --color-primary-magenta: #a30078;
+  /* ---- Brand primaries -------------------------------------- */
+  --peacock-50:  #e3f1f1;
+  --peacock-100: #b9dede;
+  --peacock-200: #7fc0c0;
+  --peacock-300: #45a1a1;
+  --peacock-400: #1f8383;
+  --peacock-500: #006464;
+  --peacock-600: #005555;
+  --peacock-700: #004545;
+  --peacock-800: #003636;
+  --peacock-900: #002626;
 
-  /* Secondary Colors (mascots & accents) */
-  --color-secondary-yellow: #ffc832;
-  --color-secondary-blue: #0aa4eb;
-  --color-secondary-red: #ff4747;
-  --color-secondary-green: #43a277;
+  --orchid-50:  #f8e4f1;
+  --orchid-100: #eebcdb;
+  --orchid-200: #e088c1;
+  --orchid-300: #d152a7;
+  --orchid-400: #ba2790;
+  --orchid-500: #a30078;
+  --orchid-600: #8b0066;
+  --orchid-700: #720054;
+  --orchid-800: #590042;
+  --orchid-900: #410030;
 
-  /* Neutral Colors */
-  --color-text-dark: #2d2d2d;
-  --color-text-light: #fafafa;
-  --color-bg-light: #fafafa;
-  --color-bg-dark: #2d2d2d;
+  /* ---- Mascot secondaries ----------------------------------- */
+  --fawn-500: #ffc832;
+  --fawn-100: #fff1cc;
+  --fawn-600: #e8ad12;
 
-  /* Spacing (8px base unit) */
+  --jay-500: #0aa4eb;
+  --jay-100: #cdeefc;
+  --jay-600: #0888c4;
+
+  --fox-500: #ff4747;
+  --fox-100: #ffd9d9;
+  --fox-600: #e62e2e;
+
+  --frog-500: #43a277;
+  --frog-100: #d6ede2;
+  --frog-600: #348160;
+
+  /* ---- Neutrals ----------------------------------------------- */
+  --jet: #2d2d2d;
+  --seasalt: #fafafa;
+  --white: #ffffff;
+
+  --gray-50:  #f4f5f5;
+  --gray-100: #e8eaea;
+  --gray-200: #d4d7d7;
+  --gray-300: #b3b8b8;
+  --gray-400: #8b9191;
+  --gray-500: #676d6d;
+  --gray-600: #4c5151;
+  --gray-700: #3a3e3e;
+  --gray-800: #2d2d2d;
+  --gray-900: #1b1c1c;
+
+  /* ---- Accessible "ink" text colors --------------------------- */
+  --peacock-ink: #005555;
+  --orchid-ink:  #8b0066;
+  --fawn-ink:    #85681a;
+  --jay-ink:     #076e9d;
+  --fox-ink:     #b53232;
+  --frog-ink:    #307354;
+
+  --text-strong: var(--jet);
+  --text-body:   var(--gray-700);
+  --text-muted:  var(--gray-500);
+
+  --surface-card: var(--white);
+
+  /* ---- Typography --------------------------------------------- */
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-heading: 'Outfit', system-ui, sans-serif;
+  --font-body:    'Nunito', system-ui, sans-serif;
+
+  /* ---- Spacing (8px base) ------------------------------------- */
   --space-half: 4px;
   --space-1: 8px;
   --space-2: 16px;
@@ -25,41 +90,67 @@
   --space-4: 32px;
   --space-6: 48px;
 
-  /* Typography */
-  --font-display: 'Gill Sans Display', 'Gill Sans', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', sans-serif;
-  --font-ui: 'Poppins', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /* ---- Text scale --------------------------------------------- */
+  --text-xs:   0.75rem;   /* 12px */
+  --text-sm:   0.875rem;  /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg:   1.5rem;    /* 24px */
+  --text-xl:   2rem;      /* 32px */
+  --text-2xl:  2.5rem;    /* 40px */
 
-  --text-xs: 0.75rem; /* 12px */
-  --text-sm: 0.875rem; /* 14px — minimum */
-  --text-base: 1rem; /* 16px */
-  --text-lg: 1.5rem; /* 24px */
-  --text-xl: 2rem; /* 32px */
-  --text-2xl: 2.5rem; /* 40px */
-
-  --leading-body: 1.5;
+  --leading-body:    1.5;
   --leading-heading: 1.2;
 
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
-  --radius-full: 9999px;
+  /* ---- Radii ---------------------------------------------------- */
+  --radius-xs:   6px;
+  --radius-sm:   10px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+  --radius-2xl:  36px;
+  --radius-pill: 999px;
+  --radius-full: 50%;
 
-  /* Shadow */
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.12);
-  --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.24);
+  /* ---- Shadows -------------------------------------------------- */
+  --shadow-xs: 0 1px 2px rgba(45, 45, 45, 0.06);
+  --shadow-sm: 0 2px 6px rgba(45, 45, 45, 0.07);
+  --shadow-md: 0 6px 18px rgba(45, 45, 45, 0.09);
+  --shadow-lg: 0 14px 34px rgba(45, 45, 45, 0.12);
+  --shadow-xl: 0 24px 60px rgba(45, 45, 45, 0.16);
 
-  /* Focus ring */
-  --focus-ring: 0 0 0 2px var(--color-primary-teal);
+  /* Legacy names (shadow-card / shadow-modal) still work */
+  --shadow-card:  var(--shadow-sm);
+  --shadow-modal: var(--shadow-lg);
 
-  /* Mascot sizes */
+  /* ---- Motion --------------------------------------------------- */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --transition-fast: 100ms var(--ease-out);
+  --transition-base: 200ms var(--ease-out);
+  --transition-slow: 300ms var(--ease-out);
+
+  /* ---- Focus ring ---------------------------------------------- */
+  --focus-ring: 0 0 0 2px var(--peacock-500);
+
+  /* ---- Mascot sizes -------------------------------------------- */
   --mascot-sm: 80px;
   --mascot-md: 120px;
   --mascot-lg: 240px;
 
-  /* Transition */
-  --transition-fast: 100ms ease;
-  --transition-base: 200ms ease;
-  --transition-slow: 300ms ease;
+  /* ==============================================================
+     Legacy aliases — keep booth-kiosk token names working
+     ============================================================== */
+  --color-primary-teal:     var(--peacock-500);
+  --color-primary-magenta:  var(--orchid-500);
+  --color-secondary-yellow: var(--fawn-500);
+  --color-secondary-blue:   var(--jay-500);
+  --color-secondary-red:    var(--fox-500);
+  --color-secondary-green:  var(--frog-500);
+  --color-text-dark:        var(--jet);
+  --color-text-light:       var(--seasalt);
+  --color-bg-light:         var(--seasalt);
+  --color-bg-dark:          var(--jet);
+  /* booth-kiosk uses font-ui; map to font-body */
+  --font-ui: var(--font-body);
 }

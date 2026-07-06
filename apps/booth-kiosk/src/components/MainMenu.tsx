@@ -48,6 +48,16 @@ export default function MainMenu({
 
   return (
     <div className="max-w-4xl mx-auto px-8 py-10">
+      {/* Logo */}
+      <div className="flex justify-center mb-8">
+        <img
+          src="/marketing-assets/logos/wizkidz-logo-seasalt.png"
+          alt="Wiz Kidz"
+          style={{ height: 56 }}
+        />
+      </div>
+
+      {/* Card status */}
       {cardData ? (
         <div className="mb-8 p-6 bg-white rounded-xl shadow-sm border border-gray-100">
           <p className="text-lg font-semibold" style={{ color: mascot?.color }}>
@@ -67,6 +77,7 @@ export default function MainMenu({
         </div>
       )}
 
+      {/* Age filter */}
       <div className="mb-8">
         <p className="text-sm font-semibold text-gray-600 mb-3">Select age group:</p>
         <div className="flex gap-3" role="group" aria-label="Age group filter">
@@ -91,30 +102,44 @@ export default function MainMenu({
         {filteredGames.length > 0 ? 'Available Games' : 'No games available for this selection'}
       </h2>
 
+      {/* Game cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {filteredGames.map(game => {
-          const gameMascot = getMascotByID(game.mascotID);
+          const themeColor = game.themeColor ?? getMascotByID(game.mascotID).color;
           return (
             <a
               key={game.id}
               href={`/games/${game.id}/`}
-              className="block p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+              className="block bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow overflow-hidden"
             >
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="font-bold text-gray-800">{game.name}</h3>
-                {game.featured && (
-                  <span
-                    className="text-xs px-2 py-0.5 rounded-full text-white font-semibold"
-                    style={{ background: gameMascot.color }}
-                  >
-                    Featured
-                  </span>
-                )}
+              {/* Mascot banner */}
+              {game.mascotImage && (
+                <div
+                  className="flex items-center justify-center"
+                  style={{ background: themeColor + '18', height: 120 }}
+                >
+                  <img
+                    src={game.mascotImage}
+                    alt=""
+                    style={{ height: 96, width: 96, objectFit: 'contain' }}
+                  />
+                </div>
+              )}
+
+              <div className="p-5">
+                <div className="flex items-start justify-between mb-1">
+                  <h3 className="font-bold text-gray-800 text-lg">{game.name}</h3>
+                  {game.featured && (
+                    <span
+                      className="text-xs px-2 py-0.5 rounded-full text-white font-semibold ml-2 shrink-0"
+                      style={{ background: themeColor }}
+                    >
+                      Featured
+                    </span>
+                  )}
+                </div>
+                <p className="text-gray-500 text-sm leading-snug">{game.description}</p>
               </div>
-              <p className="text-gray-500 text-sm">{game.description}</p>
-              <p className="mt-3 text-xs font-semibold" style={{ color: gameMascot.color }}>
-                {gameMascot.name}
-              </p>
             </a>
           );
         })}
