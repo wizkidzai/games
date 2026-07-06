@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - uses: pnpm/action-setup@v3
         with:
@@ -27,6 +29,18 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      # Make marketing-assets available to Vite's publicDir (../../public) at build time.
+      # Each game's publicDir points to the monorepo root public/, so this copy
+      # makes /marketing-assets/* resolve correctly in every game's production build.
+      - name: Copy marketing-assets into public/
+        run: |
+          if [ -d marketing-assets ] && [ -n "$(ls -A marketing-assets)" ]; then
+            cp -r marketing-assets public/marketing-assets
+            echo "Copied marketing-assets → public/marketing-assets"
+          else
+            echo "marketing-assets submodule is empty or missing — skipping copy"
+          fi
 
       # Build each game — base path must match the deployed sub-directory so
       # asset URLs resolve correctly at games.wizkidz.ai/<game-name>/.
