@@ -1,30 +1,17 @@
-import { useEffect, useState } from 'react';
-import type { CardData } from '@wizkidz/card-io';
+import { useEffect, useState, useCallback } from 'react';
 import { getMascotByID } from '@wizkidz/mascot-system';
 import type { Game } from '../types';
 
-const AGE_GROUPS = [
-  { index: 0, label: '7-10' },
-  { index: 1, label: '10-16' },
-  { index: 2, label: '16+' },
-];
+// Physical booth controller: 3 buttons only (red / blue / yellow).
+// Hardware emits keys '1' (red), '2' (blue), '3' (yellow); keyboard fallback
+// mirrors every other game in the monorepo: Space/Enter, ArrowLeft, ArrowRight.
+const KEY_SELECT = new Set(['1', ' ', 'Enter']);
+const KEY_PREV = new Set(['2', 'ArrowLeft']);
+const KEY_NEXT = new Set(['3', 'ArrowRight']);
 
-interface Props {
-  cardData: CardData | null;
-  onCardDetected: (card: CardData) => void;
-  selectedAgeGroups: number[];
-  onAgeGroupChange: (groups: number[]) => void;
-  isOfflineMode: boolean;
-  onOfflineModeChange: (offline: boolean) => void;
-}
-
-export default function MainMenu({
-  cardData,
-  selectedAgeGroups,
-  onAgeGroupChange,
-  isOfflineMode,
-}: Props) {
+export default function MainMenu() {
   const [games, setGames] = useState<Game[]>([]);
+  const [selected, setSelected] = useState(0);
 
   useEffect(() => {
     fetch('/gameRegistry.json')
@@ -32,117 +19,98 @@ export default function MainMenu({
       .then(data => setGames(data.games ?? []));
   }, []);
 
-  const filteredGames = games.filter(game => {
-    if (!isOfflineMode && cardData && game.mascotID !== cardData.mascotID) return false;
-    return game.ageGroups.some(ag => selectedAgeGroups.includes(ag));
-  });
+  const launch = useCallback((game: Game) => {
+    window.location.href = `/games/${game.id}/`;
+  }, []);
 
-  const mascot = cardData ? getMascotByID(cardData.mascotID) : null;
+  useEffect(() => {
+    if (games.length === 0) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (KEY_PREV.has(e.key)) {
+        e.preventDefault();
+        setSelected(i => (i - 1 + games.length) % games.length);
+      } else if (KEY_NEXT.has(e.key)) {
+        e.preventDefault();
+        setSelected(i => (i + 1) % games.length);
+      } else if (KEY_SELECT.has(e.key)) {
+        e.preventDefault();
+        setSelected(i => {
+          launch(games[i]);
+          return i;
+        });
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [games, launch]);
 
-  const toggleAgeGroup = (index: number) => {
-    const next = selectedAgeGroups.includes(index)
-      ? selectedAgeGroups.filter(ag => ag !== index)
-      : [...selectedAgeGroups, index];
-    if (next.length > 0) onAgeGroupChange(next);
-  };
+  if (games.length === 0) return null;
+
+  const game = games[selected];
+  const themeColor = game.themeColor ?? getMascotByID(game.mascotID).color;
 
   return (
-    <div className="max-w-4xl mx-auto px-8 py-10">
-      {/* Logo */}
-      <div className="flex justify-center mb-8">
-        <img
-          src="/marketing-assets/logos/wizkidz-logo-seasalt.png"
-          alt="Wiz Kidz"
-          style={{ height: 56 }}
-        />
-      </div>
-
-      {/* Card status */}
-      {cardData ? (
-        <div className="mb-8 p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-          <p className="text-lg font-semibold" style={{ color: mascot?.color }}>
-            Welcome back, {mascot?.name}!
-          </p>
-          <p className="text-gray-500 text-sm mt-1">
-            Total Score: <span className="font-bold text-gray-800">{cardData.totalPoints} pts</span>
-          </p>
-          <p className="text-gray-400 text-xs mt-1">Card ID: {cardData.uniqueID}</p>
-        </div>
-      ) : (
-        <div className="mb-8 p-6 bg-wk-teal/10 rounded-xl border-2 border-dashed border-wk-teal text-center">
-          <p className="text-wk-teal font-semibold text-lg">Scan your RFID card to play</p>
-          <p className="text-gray-500 text-sm mt-1">
-            Place your Wiz Kidz card on the reader below
-          </p>
-        </div>
-      )}
-
-      {/* Age filter */}
-      <div className="mb-8">
-        <p className="text-sm font-semibold text-gray-600 mb-3">Select age group:</p>
-        <div className="flex gap-3" role="group" aria-label="Age group filter">
-          {AGE_GROUPS.map(({ index, label }) => (
-            <button
-              key={index}
-              onClick={() => toggleAgeGroup(index)}
-              aria-pressed={selectedAgeGroups.includes(index)}
-              className={`px-5 py-2 rounded-full font-semibold text-sm border-2 transition-colors ${
-                selectedAgeGroups.includes(index)
-                  ? 'bg-wk-teal text-white border-wk-teal'
-                  : 'bg-white text-gray-600 border-gray-300 hover:border-wk-teal'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
+    <div className="max-w-4xl mx-auto px-8 py-10 flex flex-col items-center">
+      {/* Selected game showcase */}
+      <div
+        className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+        aria-live="polite"
+      >
+        {game.mascotImage && (
+          <div
+            className="flex items-center justify-center"
+            style={{ background: themeColor + '18', height: 220 }}
+          >
+            <img
+              src={game.mascotImage}
+              alt=""
+              style={{ height: 160, width: 160, objectFit: 'contain' }}
+            />
+          </div>
+        )}
+        <div className="p-6 text-center">
+          <h2 className="text-2xl font-bold font-display text-gray-800 mb-2">{game.name}</h2>
+          <p className="text-gray-500 text-base leading-snug">{game.description}</p>
         </div>
       </div>
 
-      <h2 className="text-xl font-bold font-display text-gray-800 mb-4">
-        {filteredGames.length > 0 ? 'Available Games' : 'No games available for this selection'}
-      </h2>
+      {/* Dots showing position among games */}
+      <div className="flex gap-2 mt-6" role="tablist" aria-label="Games">
+        {games.map((g, i) => (
+          <span
+            key={g.id}
+            role="tab"
+            aria-selected={i === selected}
+            className="rounded-full transition-all"
+            style={{
+              width: i === selected ? 24 : 10,
+              height: 10,
+              background: i === selected ? themeColor : '#D1D5DB',
+            }}
+          />
+        ))}
+      </div>
 
-      {/* Game cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {filteredGames.map(game => {
-          const themeColor = game.themeColor ?? getMascotByID(game.mascotID).color;
-          return (
-            <a
-              key={game.id}
-              href={`/games/${game.id}/`}
-              className="block bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow overflow-hidden"
-            >
-              {/* Mascot banner */}
-              {game.mascotImage && (
-                <div
-                  className="flex items-center justify-center"
-                  style={{ background: themeColor + '18', height: 120 }}
-                >
-                  <img
-                    src={game.mascotImage}
-                    alt=""
-                    style={{ height: 96, width: 96, objectFit: 'contain' }}
-                  />
-                </div>
-              )}
-
-              <div className="p-5">
-                <div className="flex items-start justify-between mb-1">
-                  <h3 className="font-bold text-gray-800 text-lg">{game.name}</h3>
-                  {game.featured && (
-                    <span
-                      className="text-xs px-2 py-0.5 rounded-full text-white font-semibold ml-2 shrink-0"
-                      style={{ background: themeColor }}
-                    >
-                      Featured
-                    </span>
-                  )}
-                </div>
-                <p className="text-gray-500 text-sm leading-snug">{game.description}</p>
-              </div>
-            </a>
-          );
-        })}
+      {/* 3-button legend — the only supported input */}
+      <div className="flex items-center justify-center gap-10 mt-10">
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-14 h-14 rounded-full bg-wk-blue shadow-[0_6px_0_#0888c4] flex items-center justify-center text-white text-2xl font-bold">
+            ◀
+          </div>
+          <span className="text-sm font-semibold text-gray-600">Previous</span>
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-20 h-20 rounded-full bg-wk-red shadow-[0_8px_0_#e62e2e] flex items-center justify-center text-white text-3xl font-bold">
+            ●
+          </div>
+          <span className="text-sm font-semibold text-gray-600">Play {game.name}</span>
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-14 h-14 rounded-full bg-wk-yellow shadow-[0_6px_0_#e8ad12] flex items-center justify-center text-white text-2xl font-bold">
+            ▶
+          </div>
+          <span className="text-sm font-semibold text-gray-600">Next</span>
+        </div>
       </div>
     </div>
   );
