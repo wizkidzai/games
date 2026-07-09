@@ -5,7 +5,7 @@
     {
       "id": "echo-bots",
       "name": "Echo Bots",
-      "description": "Repeat the bot's light-and-sound sequence — how long can you go?",
+      "description": "Hi, I'm Blue Jay! Do you want to test your memory power?",
       "mascotID": 5,
       "mascotImage": "/marketing-assets/mascots/jay.png",
       "themeColor": "#0aa4eb",
@@ -17,7 +17,7 @@
     {
       "id": "bubble-pop",
       "name": "Math Pop",
-      "description": "True or false — pop the right math bubbles before time runs out!",
+      "description": "Hi, I'm Green Frog! How fast can you do Math in your mind?",
       "mascotID": 3,
       "mascotImage": "/marketing-assets/mascots/frog.png",
       "themeColor": "#43a277",
@@ -29,7 +29,7 @@
     {
       "id": "code-cracker",
       "name": "Code Cracker",
-      "description": "Program a robot with Turn and Forward commands to collect the star!",
+      "description": "Hi, I'm Yellow Fawn! Do you wanna code with me?",
       "mascotID": 4,
       "mascotImage": "/marketing-assets/mascots/fawn.png",
       "themeColor": "#ffc832",
@@ -41,7 +41,7 @@
     {
       "id": "speedy-fingers",
       "name": "Blast Off",
-      "description": "React the instant the rocket launches — fastest fingers wins!",
+      "description": "Hi, I'm Red Fox! Do you want to see who's quicker?",
       "mascotID": 2,
       "mascotImage": "/marketing-assets/mascots/fox.png",
       "themeColor": "#ff4747",
@@ -53,7 +53,7 @@
     {
       "id": "color-clash",
       "name": "Robo Quiz",
-      "description": "Answer STEM trivia — match your answer to the right color button!",
+      "description": "Hi, I'm Peacock Pride. I challenge you to a STEM trivia!",
       "mascotID": 0,
       "mascotImage": "/marketing-assets/mascots/peacock.png",
       "themeColor": "#006464",

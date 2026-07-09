@@ -68,8 +68,18 @@ export default class App extends Component<Record<string, never>, AppState> {
   private _lastInput = Date.now();
   private _clockEnd = 0;
 
+  // The booth's 3-pedal controller can't express 5 actions (Left/Right/
+  // Forward/Run/Undo) as 5 distinct buttons, so on the robot screen we
+  // overload the red and blue pedals with tap-vs-hold: a quick tap adds the
+  // most-common step (Forward on red, Turn Left on blue); holding the pedal
+  // for HOLD_MS does the rarer action (Run on red, Undo on blue). Yellow has
+  // no hold variant, so it fires immediately on press for a snappier feel.
+  private static readonly HOLD_MS = 500;
+  private _pressStart: Partial<Record<'A' | 'B' | 'C', number>> = {};
+
   componentDidMount() {
-    window.addEventListener('keydown', this.onKey);
+    window.addEventListener('keydown', this.onKeyDown);
+    window.addEventListener('keyup', this.onKeyUp);
     this._idleIv = setInterval(() => {
       if (this.state.screen !== 'attract' && Date.now() - this._lastInput > CONFIG.idleSeconds * 1000) this.goAttract();
     }, 1000);
@@ -77,21 +87,50 @@ export default class App extends Component<Record<string, never>, AppState> {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.onKey);
+    window.removeEventListener('keydown', this.onKeyDown);
+    window.removeEventListener('keyup', this.onKeyUp);
     clearInterval(this._idleIv);
     this.clearTimers();
   }
 
-  onKey = (e: KeyboardEvent) => {
+  logicalKeyFor(k: string): 'A' | 'B' | 'C' | null {
+    if (k === ' ' || k === 'Enter' || k === 'b' || k === CONFIG.keyA) return 'A';
+    if (k === 'ArrowLeft' || k === 'a' || k === CONFIG.keyB) return 'B';
+    if (k === 'ArrowRight' || k === 'c' || k === CONFIG.keyC) return 'C';
+    return null;
+  }
+
+  onKeyDown = (e: KeyboardEvent) => {
     this._lastInput = Date.now();
     const k = e.key;
     if (this.state.screen === 'robot') {
       if (k === 'ArrowUp') { e.preventDefault(); this.addCmd('F'); return; }
       if (k === 'Backspace') { e.preventDefault(); this.undoCmd(); return; }
     }
-    if (k === ' ' || k === 'Enter' || k === CONFIG.keyA) { e.preventDefault(); this.press('A'); }
-    else if (k === 'ArrowLeft'  || k === CONFIG.keyB)   { e.preventDefault(); this.press('B'); }
-    else if (k === 'ArrowRight' || k === CONFIG.keyC)   { e.preventDefault(); this.press('C'); }
+    const btn = this.logicalKeyFor(k);
+    if (!btn) return;
+    e.preventDefault();
+    if (this.state.screen !== 'robot') {
+      // Outside gameplay every button is a single action — behave exactly
+      // as before, firing immediately on press.
+      if (!e.repeat) this.press(btn);
+      return;
+    }
+    if (e.repeat) return; // hardware/OS auto-repeat while held — not a new press
+    if (btn === 'C') { this.press('C'); return; } // no hold variant, fire now
+    this._pressStart[btn] = Date.now();
+  };
+
+  onKeyUp = (e: KeyboardEvent) => {
+    if (this.state.screen !== 'robot') return;
+    const btn = this.logicalKeyFor(e.key);
+    if (!btn || btn === 'C') return;
+    const start = this._pressStart[btn];
+    delete this._pressStart[btn];
+    if (start == null) return;
+    const held = Date.now() - start >= App.HOLD_MS;
+    if (btn === 'A') { if (held) this.runProgram(); else this.addCmd('F'); }
+    else { if (held) this.undoCmd(); else this.addCmd('L'); }
   };
 
   after(ms: number, fn: () => void) { const t = setTimeout(fn, ms); this._timeouts.push(t); return t; }
@@ -270,7 +309,7 @@ export default class App extends Component<Record<string, never>, AppState> {
     const A = (l: string): LegendButton => ({ c: RED, cDark: RED_D, g: '⬤', l, size: 76, tap: () => this.press('A') });
     const C = (g: string, l: string): LegendButton => ({ c: YELLOW, cDark: YELLOW_D, g, l, size: 60, tap: () => this.press('C') });
     const { screen, resultPhase } = this.state;
-    if (screen === 'robot') return [B('↺', 'Add turn'), A('Run the code!'), C('↻', 'Add turn')];
+    if (screen === 'robot') return [B('↺', 'Left · hold Undo'), A('Forward · hold Run!'), C('↻', 'Turn right')];
     if (screen === 'result') {
       if (resultPhase === 'entry') return [B('◀', 'Letter'), A('Lock it in'), C('▶', 'Letter')];
       return [A('Back to games!')];

@@ -4,10 +4,11 @@ import type { Game } from '../types';
 
 // Physical booth controller: 3 buttons only (red / blue / yellow).
 // Hardware emits keys '1' (red), '2' (blue), '3' (yellow); keyboard fallback
-// mirrors every other game in the monorepo: Space/Enter, ArrowLeft, ArrowRight.
-const KEY_SELECT = new Set(['1', ' ', 'Enter']);
-const KEY_PREV = new Set(['2', 'ArrowLeft']);
-const KEY_NEXT = new Set(['3', 'ArrowRight']);
+// mirrors every other game in the monorepo: Space/Enter/'b', ArrowLeft/'a',
+// ArrowRight/'c'.
+const KEY_SELECT = new Set(['1', ' ', 'Enter', 'b']);
+const KEY_PREV = new Set(['2', 'ArrowLeft', 'a']);
+const KEY_NEXT = new Set(['3', 'ArrowRight', 'c']);
 
 export default function MainMenu() {
   const [games, setGames] = useState<Game[]>([]);
