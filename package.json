@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "pnpm -r --filter './games/*' run dev",
     "dev:kiosk": "pnpm --filter booth-kiosk dev",
+    "dev:all": "node scripts/dev-all.js",
     "dev:admin": "pnpm --filter admin-card-config dev",
     "build": "pnpm -r run build",
     "test": "vitest run",
