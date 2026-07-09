@@ -128,7 +128,7 @@ export default function ScreenResult({
       <div style={{ zIndex: 1, display: 'flex', gap: vmin(60), alignItems: 'center' }}>
         {resultPhase === 'board' && (
           <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: vmin(28), color: 'rgba(250,250,250,0.85)', textAlign: 'center' }}>
-            Press the big button to play again!
+            Press any button to head back to the games!
           </div>
         )}
       </div>

@@ -44,6 +44,16 @@ export default function MainMenu() {
     return () => window.removeEventListener('keydown', onKey);
   }, [games, launch]);
 
+  // Auto-advance the carousel every 3s; any manual prev/next press above
+  // changes `selected`, which resets this timer so it doesn't fight the player.
+  useEffect(() => {
+    if (games.length <= 1) return;
+    const t = setTimeout(() => {
+      setSelected(i => (i + 1) % games.length);
+    }, 3000);
+    return () => clearTimeout(t);
+  }, [selected, games]);
+
   if (games.length === 0) return null;
 
   const game = games[selected];
@@ -51,11 +61,13 @@ export default function MainMenu() {
 
   return (
     <div className="max-w-4xl mx-auto px-8 py-10 flex flex-col items-center">
+      {/* Corner brand mark — fixed to the viewport (not the centered content
+          column) so it sits in the extreme top-left of the physical screen,
+          and out of the flow so it never pushes the game showcase down. */}
       <img
-        src="/marketing-assets/logo/wiz-kidz-logo-teal-1130x500.png"
+        src="/marketing-assets/logo/wiz-kidz-logo-teal-289x128.png"
         alt="Wiz Kidz"
-        style={{ height: 110 }}
-        className="mb-8"
+        style={{ position: 'fixed', top: 16, left: 16, height: 64, zIndex: 10 }}
       />
 
       {/* Selected game showcase */}
