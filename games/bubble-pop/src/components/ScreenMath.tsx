@@ -23,7 +23,7 @@ export default function ScreenMath({
   return (
     <div style={{ position: 'absolute', inset: 0, background: 'var(--seasalt)', display: 'flex', flexDirection: 'column', padding: `${vmin(36)} ${vmin(60)} ${vmin(160)}`, gap: vmin(24) }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: vmin(46), color: 'var(--frog-600)' }}>Bubble Pop</div>
+        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: vmin(46), color: 'var(--frog-600)' }}>Math Pop</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: vmin(20) }}>
           {mStreakShow && (
             <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: vmin(28), color: 'var(--fawn-ink)', background: 'var(--fawn-100)', borderRadius: 'var(--radius-pill)', padding: `${vmin(10)} ${vmin(28)}` }}>{mStreakText}</div>

@@ -7,7 +7,7 @@ export const YELLOW = '#ffc832', YELLOW_D = '#e8ad12';
 
 export const GAME_ID    = 'echo-bots';
 export const GAME_TITLE = 'Echo Bots';
-export const GAME_TAG   = 'Watch the bots flash. Remember. Repeat!';
+export const GAME_TAG   = "Hi, I'm Blue Jay! Do you want to test your memory power?";
 export const THEME_COLOR = '#0aa4eb';
 export const MASCOT_SRC  = '/marketing-assets/mascots/jay.png';
 

@@ -4,7 +4,7 @@ export const YELLOW = '#ffc832', YELLOW_D = '#e8ad12';
 
 export const GAME_ID     = 'code-cracker';
 export const GAME_TITLE  = 'Code Cracker';
-export const GAME_TAG    = 'Code the robot — program it, then hit GO!';
+export const GAME_TAG    = "Hi, I'm Yellow Fawn! Do you wanna code with me?";
 export const THEME_COLOR = '#ffc832';
 export const MASCOT_SRC  = '/marketing-assets/mascots/fawn.png';
 

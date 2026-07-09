@@ -25,7 +25,7 @@ export default function ScreenReaction({ onPress, rBg, scoreText, rDots, rocketY
       }}
     >
       <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: vmin(46), color: 'var(--seasalt)' }}>Speedy Fingers</div>
+        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: vmin(46), color: 'var(--seasalt)' }}>Blast Off</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: vmin(26) }}>
           <div style={{ display: 'flex', gap: vmin(14) }}>
             {rDots.map((d, i) => (

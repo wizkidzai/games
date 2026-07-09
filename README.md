@@ -7,10 +7,10 @@ Interactive booth games for kids, designed to run on a kiosk with a single big b
 | Game | Description | Mascot |
 |------|-------------|--------|
 | **Echo Bots** | Repeat the bot's light-and-sound sequence — how long can you go? | Blue Jay |
-| **Bubble Pop** | True or false — pop the right math bubbles before time runs out! | Green Frog |
+| **Math Pop** | True or false — pop the right math bubbles before time runs out! | Green Frog |
 | **Code Cracker** | Program a robot with Turn and Forward commands to collect the star! | Yellow Fawn |
-| **Speedy Fingers** | React the instant the rocket launches — fastest fingers wins! | Red Fox |
-| **Color Clash** | Answer STEM trivia — match your answer to the right color button! | Peacock Pride |
+| **Blast Off** | React the instant the rocket launches — fastest fingers wins! | Red Fox |
+| **Robo Quiz** | Answer STEM trivia — match your answer to the right color button! | Peacock Pride |
 
 ## Stack
 

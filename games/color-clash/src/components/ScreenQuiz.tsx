@@ -29,7 +29,7 @@ export default function ScreenQuiz({
   return (
     <div style={{ position: 'absolute', inset: 0, background: 'var(--seasalt)', display: 'flex', flexDirection: 'column', padding: `${vmin(36)} ${vmin(60)} ${vmin(160)}`, gap: vmin(24) }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: vmin(46), color: 'var(--peacock-500)' }}>Color Clash</div>
+        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: vmin(46), color: 'var(--peacock-500)' }}>Robo Quiz</div>
         <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: vmin(34), color: 'var(--seasalt)', background: 'var(--jet)', borderRadius: 'var(--radius-pill)', padding: `${vmin(10)} ${vmin(32)}` }}>{scoreText}</div>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: vmin(24) }}>

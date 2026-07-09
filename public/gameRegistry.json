@@ -16,7 +16,7 @@
     },
     {
       "id": "bubble-pop",
-      "name": "Bubble Pop",
+      "name": "Math Pop",
       "description": "True or false — pop the right math bubbles before time runs out!",
       "mascotID": 3,
       "mascotImage": "/marketing-assets/mascots/frog.png",
@@ -40,7 +40,7 @@
     },
     {
       "id": "speedy-fingers",
-      "name": "Speedy Fingers",
+      "name": "Blast Off",
       "description": "React the instant the rocket launches — fastest fingers wins!",
       "mascotID": 2,
       "mascotImage": "/marketing-assets/mascots/fox.png",
@@ -52,7 +52,7 @@
     },
     {
       "id": "color-clash",
-      "name": "Color Clash",
+      "name": "Robo Quiz",
       "description": "Answer STEM trivia — match your answer to the right color button!",
       "mascotID": 0,
       "mascotImage": "/marketing-assets/mascots/peacock.png",

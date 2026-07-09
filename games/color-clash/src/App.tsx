@@ -1,5 +1,5 @@
 /**
- * Color Clash — STEM trivia with colored answer buttons.
+ * Robo Quiz — STEM trivia with colored answer buttons.
  * Extracted from wizkidzboothgames/app/src/App.jsx (quiz logic only).
  */
 
@@ -105,13 +105,19 @@ export default class App extends Component<Record<string, never>, AppState> {
     this.clearTimers();
     this.sfx.fanfare();
     const board = await loadBoard(GAME_ID);
+    const resultPhase = qualifies(board, score) ? 'entry' : 'board';
     this.setState({
       screen: 'result', finalScore: score,
-      resultPhase: qualifies(board, score) ? 'entry' : 'board',
+      resultPhase,
       initials: ['A', 'A', 'A'], initSlot: 0, savedName: '', board,
       confettiPieces: this.buildConfetti(score > 0),
     });
+    if (resultPhase === 'board') this.after(10000, this.goKiosk);
   }
+
+  // Game over is final once the board phase shows — return to the kiosk
+  // landing page either on the next button press or after 10s idle.
+  goKiosk = () => { window.location.href = '/'; };
 
   buildConfetti(on: boolean): ConfettiPiece[] {
     if (!on) return [];
@@ -168,10 +174,11 @@ export default class App extends Component<Record<string, never>, AppState> {
               void tryWriteScore(this.state.finalScore);
               const board = await loadBoard(GAME_ID);
               this.setState({ resultPhase: 'board', savedName: name, board });
+              this.after(10000, this.goKiosk);
             });
           } else { this.setState({ initSlot: initSlot + 1 }); }
         }
-      } else { this.sfx.good(); this.startQuiz(); }
+      } else { this.sfx.good(); this.goKiosk(); }
     }
   };
 
@@ -183,7 +190,7 @@ export default class App extends Component<Record<string, never>, AppState> {
     if (screen === 'quiz')   return [B('◀', ''), A('Press the matching color!'), C('▶', '')];
     if (screen === 'result') {
       if (resultPhase === 'entry') return [B('◀', 'Letter'), A('Lock it in'), C('▶', 'Letter')];
-      return [A('Play again!')];
+      return [A('Back to games!')];
     }
     return [A('Press to play!')];
   }

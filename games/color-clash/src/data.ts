@@ -3,8 +3,8 @@ export const RED    = '#ff4747', RED_D    = '#e62e2e';
 export const YELLOW = '#ffc832', YELLOW_D = '#e8ad12';
 
 export const GAME_ID     = 'color-clash';
-export const GAME_TITLE  = 'Color Clash';
-export const GAME_TAG    = 'Answer brainy STEM questions — fast!';
+export const GAME_TITLE  = 'Robo Quiz';
+export const GAME_TAG    = "Hi, I'm Peacock Pride. I challenge you to a STEM trivia!";
 export const THEME_COLOR = '#006464';
 export const MASCOT_SRC  = '/marketing-assets/mascots/peacock.png';
 
