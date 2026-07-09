@@ -8,7 +8,7 @@
     "pnpm": ">=8"
   },
   "scripts": {
-    "dev": "pnpm -r --filter './games/*' run dev",
+    "dev": "pnpm -r --parallel --filter './games/*' run dev",
     "dev:kiosk": "pnpm --filter booth-kiosk dev",
     "dev:all": "node scripts/dev-all.js",
     "dev:admin": "pnpm --filter admin-card-config dev",
@@ -33,6 +33,8 @@
     "@types/node": "^20.14.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "@vitejs/plugin-react": "^4.3.0",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
