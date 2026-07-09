@@ -3,7 +3,7 @@
  * Extracted from wizkidzboothgames/app/src/App.jsx (reaction logic only).
  */
 
-import { Component, createRef } from 'react';
+import { Component } from 'react';
 import { CONFIG } from './config';
 import { Sfx } from './audio';
 import { loadBoard, qualifies, saveEntry } from '@wizkidz/leaderboard';
@@ -17,12 +17,9 @@ import ButtonLegend from './components/ButtonLegend';
 import type { LegendButton } from './components/ButtonLegend';
 import { BLUE, BLUE_D, RED, RED_D, YELLOW, YELLOW_D, GAME_ID, GAME_TITLE, GAME_TAG, THEME_COLOR, MASCOT_SRC } from './data';
 
-const STAGE_W = 1280, STAGE_H = 1080;
-
 type RPhase = 'intro' | 'wait' | 'go' | 'hit' | 'early';
 
 interface AppState {
-  scale: number;
   screen: 'attract' | 'reaction' | 'result';
   score: number;
   rRound: number;
@@ -41,7 +38,7 @@ interface AppState {
 
 export default class App extends Component<Record<string, never>, AppState> {
   state: AppState = {
-    scale: 1, screen: 'attract', score: 0,
+    screen: 'attract', score: 0,
     rRound: 0, rPhase: 'intro', rMs: 0, rResults: [],
     finalScore: 0, resultPhase: 'board',
     initials: ['A', 'A', 'A'], initSlot: 0, savedName: '',
@@ -49,7 +46,6 @@ export default class App extends Component<Record<string, never>, AppState> {
     playerUID: null,
   };
 
-  gameRef = createRef<HTMLDivElement>();
   private sfx = new Sfx(() => CONFIG.soundOn);
   private _timeouts: ReturnType<typeof setTimeout>[] = [];
   private _idleIv?: ReturnType<typeof setInterval>;
@@ -57,8 +53,6 @@ export default class App extends Component<Record<string, never>, AppState> {
   private _goAt = 0;
 
   componentDidMount() {
-    this.fit();
-    window.addEventListener('resize', this.fit);
     window.addEventListener('keydown', this.onKey);
     this._idleIv = setInterval(() => {
       if (this.state.screen !== 'attract' && Date.now() - this._lastInput > CONFIG.idleSeconds * 1000) this.goAttract();
@@ -67,19 +61,10 @@ export default class App extends Component<Record<string, never>, AppState> {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.fit);
     window.removeEventListener('keydown', this.onKey);
     clearInterval(this._idleIv);
     this.clearTimers();
   }
-
-  fit = () => {
-    const el = this.gameRef.current;
-    const w = el?.clientWidth ?? window.innerWidth;
-    const h = el?.clientHeight ?? window.innerHeight;
-    const sc = Math.max(0.05, Math.min(w / STAGE_W, h / STAGE_H));
-    if (sc !== this.state.scale) this.setState({ scale: sc });
-  };
 
   onKey = (e: KeyboardEvent) => {
     this._lastInput = Date.now();
@@ -209,9 +194,8 @@ export default class App extends Component<Record<string, never>, AppState> {
     const shellBg = s.screen === 'reaction' ? rBg : 'var(--seasalt)';
 
     return (
-      <div style={{ position: 'fixed', inset: 0, background: shellBg, transition: 'background 400ms ease', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', fontFamily: 'var(--font-body)', userSelect: 'none' }}>
-        <div ref={this.gameRef} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-          <div style={{ width: STAGE_W, height: STAGE_H, position: 'relative', overflow: 'hidden', transform: `scale(${s.scale})`, transformOrigin: 'center', flex: 'none' }}>
+      <div style={{ position: 'fixed', inset: 0, background: shellBg, transition: 'background 400ms ease', overflow: 'hidden', fontFamily: 'var(--font-body)', userSelect: 'none' }}>
+        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
             {s.screen === 'attract' && <ScreenAttract onPress={() => this.press('A')} gameTitle={GAME_TITLE} gameTag={GAME_TAG} mascotSrc={MASCOT_SRC} themeColor={THEME_COLOR} />}
             {s.screen === 'reaction' && (
               <ScreenReaction onPress={() => { this._lastInput = Date.now(); this.reactPress(); }} rBg={rBg} scoreText={s.score.toLocaleString() + ' pts'} rDots={rDots} rocketY={ph === 'hit' ? -60 : 0} rBigText={rBigText} rSubText={rSubText} rTextAnim={ph === 'go' ? 'wkBlink 0.5s ease infinite' : 'none'} />
@@ -220,7 +204,6 @@ export default class App extends Component<Record<string, never>, AppState> {
               <ScreenResult confettiPieces={s.confettiPieces} resultTitle={s.finalScore > 0 ? 'GREAT JOB!' : 'GOOD TRY!'} gameTitle={GAME_TITLE} finalScore={s.finalScore} resultPhase={s.resultPhase} initials={s.initials} initSlot={s.initSlot} board={s.board} savedName={s.savedName} />
             )}
             {s.screen !== 'attract' && <ButtonLegend legend={this.legendFor()} />}
-          </div>
         </div>
       </div>
     );

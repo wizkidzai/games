@@ -6,7 +6,7 @@
  * No session management, no hardware orchestration beyond that.
  */
 
-import { Component, createRef } from 'react';
+import { Component } from 'react';
 import { CONFIG } from './config';
 import { Sfx } from './audio';
 import { loadBoard, qualifies, saveEntry } from '@wizkidz/leaderboard';
@@ -23,10 +23,10 @@ import {
   PAD_COLORS, GAME_ID, GAME_TITLE, GAME_TAG, THEME_COLOR, MASCOT_SRC,
 } from './data';
 
-const STAGE_W = 1280, STAGE_H = 1080;
+// See ScreenAttract.tsx for why sizes are expressed in vmin via this helper.
+const vmin = (px: number) => `${(px / 10.8).toFixed(2)}vmin`;
 
 interface AppState {
-  scale: number;
   screen: 'attract' | 'simon' | 'result';
   score: number;
   // simon state
@@ -49,7 +49,7 @@ interface AppState {
 
 export default class App extends Component<Record<string, never>, AppState> {
   state: AppState = {
-    scale: 1, screen: 'attract', score: 0,
+    screen: 'attract', score: 0,
     sSeq: [], sPhase: 'watch', sLit: -1, sInput: 0, sRound: 1,
     finalScore: 0, resultPhase: 'board',
     initials: ['A', 'A', 'A'], initSlot: 0, savedName: '',
@@ -57,7 +57,6 @@ export default class App extends Component<Record<string, never>, AppState> {
     playerUID: null,
   };
 
-  gameRef = createRef<HTMLDivElement>();
   private sfx = new Sfx(() => CONFIG.soundOn);
   private _timeouts: ReturnType<typeof setTimeout>[] = [];
   private _tickIv?: ReturnType<typeof setInterval>;
@@ -65,8 +64,6 @@ export default class App extends Component<Record<string, never>, AppState> {
   private _lastInput = Date.now();
 
   componentDidMount() {
-    this.fit();
-    window.addEventListener('resize', this.fit);
     window.addEventListener('keydown', this.onKey);
     this._idleIv = setInterval(() => {
       if (this.state.screen !== 'attract' && Date.now() - this._lastInput > CONFIG.idleSeconds * 1000) {
@@ -78,19 +75,10 @@ export default class App extends Component<Record<string, never>, AppState> {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.fit);
     window.removeEventListener('keydown', this.onKey);
     clearInterval(this._idleIv);
     this.clearTimers();
   }
-
-  fit = () => {
-    const el = this.gameRef.current;
-    const w = el?.clientWidth ?? window.innerWidth;
-    const h = el?.clientHeight ?? window.innerHeight;
-    const sc = Math.max(0.05, Math.min(w / STAGE_W, h / STAGE_H));
-    if (sc !== this.state.scale) this.setState({ scale: sc });
-  };
 
   onKey = (e: KeyboardEvent) => {
     this._lastInput = Date.now();
@@ -245,51 +233,49 @@ export default class App extends Component<Record<string, never>, AppState> {
       const lit = s.sLit === i;
       return {
         img: p.img, bg: lit ? p.bg : p.dim, scl: lit ? 1.09 : 1,
-        glow: lit ? `0 0 70px ${p.bg}` : '0 10px 24px rgba(0,0,0,0.35)',
+        glow: lit ? `0 0 ${vmin(70)} ${p.bg}` : `0 ${vmin(10)} ${vmin(24)} rgba(0,0,0,0.35)`,
         tap: () => { this._lastInput = Date.now(); this.simonPress(i); },
       };
     });
 
     return (
-      <div style={{ position: 'fixed', inset: 0, background: s.screen === 'attract' ? 'var(--peacock-500)' : 'var(--peacock-800)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', fontFamily: 'var(--font-body)', userSelect: 'none' }}>
-        <div ref={this.gameRef} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-          <div style={{ width: STAGE_W, height: STAGE_H, position: 'relative', overflow: 'hidden', transform: `scale(${s.scale})`, transformOrigin: 'center', flex: 'none' }}>
+      <div style={{ position: 'fixed', inset: 0, background: s.screen === 'attract' ? 'var(--peacock-500)' : 'var(--peacock-800)', overflow: 'hidden', fontFamily: 'var(--font-body)', userSelect: 'none' }}>
+        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
 
-            {s.screen === 'attract' && (
-              <ScreenAttract
-                onPress={() => this.press('A')}
-                gameTitle={GAME_TITLE}
-                gameTag={GAME_TAG}
-                mascotSrc={MASCOT_SRC}
-                themeColor={THEME_COLOR}
-              />
-            )}
+          {s.screen === 'attract' && (
+            <ScreenAttract
+              onPress={() => this.press('A')}
+              gameTitle={GAME_TITLE}
+              gameTag={GAME_TAG}
+              mascotSrc={MASCOT_SRC}
+              themeColor={THEME_COLOR}
+            />
+          )}
 
-            {s.screen === 'simon' && (
-              <ScreenSimon
-                scoreText={scoreText}
-                sRoundText={'Round ' + s.sRound}
-                sStatus={sStatus}
-                sPads={sPads}
-              />
-            )}
+          {s.screen === 'simon' && (
+            <ScreenSimon
+              scoreText={scoreText}
+              sRoundText={'Round ' + s.sRound}
+              sStatus={sStatus}
+              sPads={sPads}
+            />
+          )}
 
-            {s.screen === 'result' && (
-              <ScreenResult
-                confettiPieces={s.confettiPieces}
-                resultTitle={s.finalScore > 0 ? 'GREAT JOB!' : 'GOOD TRY!'}
-                gameTitle={GAME_TITLE}
-                finalScore={s.finalScore}
-                resultPhase={s.resultPhase}
-                initials={s.initials}
-                initSlot={s.initSlot}
-                board={s.board}
-                savedName={s.savedName}
-              />
-            )}
+          {s.screen === 'result' && (
+            <ScreenResult
+              confettiPieces={s.confettiPieces}
+              resultTitle={s.finalScore > 0 ? 'GREAT JOB!' : 'GOOD TRY!'}
+              gameTitle={GAME_TITLE}
+              finalScore={s.finalScore}
+              resultPhase={s.resultPhase}
+              initials={s.initials}
+              initSlot={s.initSlot}
+              board={s.board}
+              savedName={s.savedName}
+            />
+          )}
 
-            {s.screen !== 'attract' && <ButtonLegend legend={this.legendFor()} />}
-          </div>
+          {s.screen !== 'attract' && <ButtonLegend legend={this.legendFor()} />}
         </div>
       </div>
     );

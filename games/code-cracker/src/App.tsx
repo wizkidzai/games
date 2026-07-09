@@ -4,7 +4,7 @@
  * Clock is always 90s (as in original).
  */
 
-import { Component, createRef } from 'react';
+import { Component } from 'react';
 import { CONFIG } from './config';
 import { Sfx } from './audio';
 import { loadBoard, qualifies, saveEntry } from '@wizkidz/leaderboard';
@@ -22,13 +22,14 @@ import {
   GAME_ID, GAME_TITLE, GAME_TAG, THEME_COLOR, MASCOT_SRC, LEVELS,
 } from './data';
 
-const STAGE_W = 1280, STAGE_H = 1080;
+// See ScreenAttract.tsx for why sizes are expressed in vmin via this helper.
+const vmin = (px: number) => `${(px / 10.8).toFixed(2)}vmin`;
+
 type RobotCmd = 'L' | 'F' | 'R';
 
 interface Battery { x: number; y: number; }
 
 interface AppState {
-  scale: number;
   screen: 'attract' | 'robot' | 'result';
   score: number;
   timeLeft: number;
@@ -51,7 +52,7 @@ interface AppState {
 
 export default class App extends Component<Record<string, never>, AppState> {
   state: AppState = {
-    scale: 1, screen: 'attract', score: 0, timeLeft: 0, timeTotal: 90,
+    screen: 'attract', score: 0, timeLeft: 0, timeTotal: 90,
     rbLevel: 0, rbX: 0, rbY: 4, rbRot: 0, rbBatteries: [], rbBump: false, rbFlash: '',
     rbProg: [], rbRun: false, rbStep: -1,
     finalScore: 0, resultPhase: 'board',
@@ -60,7 +61,6 @@ export default class App extends Component<Record<string, never>, AppState> {
     playerUID: null,
   };
 
-  gameRef = createRef<HTMLDivElement>();
   private sfx = new Sfx(() => CONFIG.soundOn);
   private _timeouts: ReturnType<typeof setTimeout>[] = [];
   private _tickIv?: ReturnType<typeof setInterval>;
@@ -69,8 +69,6 @@ export default class App extends Component<Record<string, never>, AppState> {
   private _clockEnd = 0;
 
   componentDidMount() {
-    this.fit();
-    window.addEventListener('resize', this.fit);
     window.addEventListener('keydown', this.onKey);
     this._idleIv = setInterval(() => {
       if (this.state.screen !== 'attract' && Date.now() - this._lastInput > CONFIG.idleSeconds * 1000) this.goAttract();
@@ -79,19 +77,10 @@ export default class App extends Component<Record<string, never>, AppState> {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.fit);
     window.removeEventListener('keydown', this.onKey);
     clearInterval(this._idleIv);
     this.clearTimers();
   }
-
-  fit = () => {
-    const el = this.gameRef.current;
-    const w = el?.clientWidth ?? window.innerWidth;
-    const h = el?.clientHeight ?? window.innerHeight;
-    const sc = Math.max(0.05, Math.min(w / STAGE_W, h / STAGE_H));
-    if (sc !== this.state.scale) this.setState({ scale: sc });
-  };
 
   onKey = (e: KeyboardEvent) => {
     this._lastInput = Date.now();
@@ -313,9 +302,8 @@ export default class App extends Component<Record<string, never>, AppState> {
     const goReady = !s.rbRun && !s.rbFlash && s.rbProg.length > 0;
 
     return (
-      <div style={{ position: 'fixed', inset: 0, background: 'var(--seasalt)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', fontFamily: 'var(--font-body)', userSelect: 'none' }}>
-        <div ref={this.gameRef} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-          <div style={{ width: STAGE_W, height: STAGE_H, position: 'relative', overflow: 'hidden', transform: `scale(${s.scale})`, transformOrigin: 'center', flex: 'none' }}>
+      <div style={{ position: 'fixed', inset: 0, background: 'var(--seasalt)', overflow: 'hidden', fontFamily: 'var(--font-body)', userSelect: 'none' }}>
+        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
             {s.screen === 'attract' && <ScreenAttract onPress={() => this.press('A')} gameTitle={GAME_TITLE} gameTag={GAME_TAG} mascotSrc={MASCOT_SRC} themeColor={THEME_COLOR} />}
             {s.screen === 'robot' && (
               <ScreenRobot
@@ -332,7 +320,7 @@ export default class App extends Component<Record<string, never>, AppState> {
                 rbGoShadow={s.rbRun ? '#6f7575' : goReady ? '#e62e2e' : '#a9adad'}
                 rbGoText={s.rbRun ? 'Running…' : '▶ GO!'}
                 rbCells={cells}
-                rbTransform={`translate(${s.rbX * 108}px, ${s.rbY * 108}px) rotate(${s.rbRot}deg)`}
+                rbTransform={`translate(${vmin(s.rbX * 108)}, ${vmin(s.rbY * 108)}) rotate(${s.rbRot}deg)`}
                 rbShakeAnim={s.rbBump ? 'wkShake 320ms ease' : 'none'}
                 rbFlashShow={!!s.rbFlash} rbFlashText={s.rbFlash}
               />
@@ -341,7 +329,6 @@ export default class App extends Component<Record<string, never>, AppState> {
               <ScreenResult confettiPieces={s.confettiPieces} resultTitle={s.finalScore > 0 ? 'GREAT JOB!' : 'GOOD TRY!'} gameTitle={GAME_TITLE} finalScore={s.finalScore} resultPhase={s.resultPhase} initials={s.initials} initSlot={s.initSlot} board={s.board} savedName={s.savedName} />
             )}
             {s.screen !== 'attract' && <ButtonLegend legend={this.legendFor()} />}
-          </div>
         </div>
       </div>
     );

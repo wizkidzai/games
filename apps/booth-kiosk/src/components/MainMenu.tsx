@@ -51,6 +51,13 @@ export default function MainMenu() {
 
   return (
     <div className="max-w-4xl mx-auto px-8 py-10 flex flex-col items-center">
+      <img
+        src="/marketing-assets/logo/wiz-kidz-logo-teal-1130x500.png"
+        alt="Wiz Kidz"
+        style={{ height: 110 }}
+        className="mb-8"
+      />
+
       {/* Selected game showcase */}
       <div
         className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"

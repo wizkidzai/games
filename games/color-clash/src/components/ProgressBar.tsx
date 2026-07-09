@@ -1,3 +1,6 @@
+// See ScreenAttract.tsx for why sizes are expressed in vmin via this helper.
+const vmin = (px: number) => `${(px / 10.8).toFixed(2)}vmin`;
+
 type ColorKey = 'peacock' | 'orchid' | 'fawn' | 'jay' | 'fox' | 'frog';
 
 const COLORS: Record<ColorKey, string> = {
@@ -19,7 +22,7 @@ export default function ProgressBar({ value = 0, color = 'peacock', height = 12 
   const fill = COLORS[color] ?? COLORS.peacock;
   const pct = Math.max(0, Math.min(100, value));
   return (
-    <div style={{ width: '100%', height, background: 'var(--gray-100)', borderRadius: 'var(--radius-pill)', overflow: 'hidden' }}>
+    <div style={{ width: '100%', height: vmin(height), background: 'var(--gray-100)', borderRadius: 'var(--radius-pill)', overflow: 'hidden' }}>
       <div style={{ width: pct + '%', height: '100%', background: fill, borderRadius: 'var(--radius-pill)', transition: 'width 360ms var(--ease-out)' }} />
     </div>
   );
