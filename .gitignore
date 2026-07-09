@@ -7,6 +7,9 @@ dist/
 build/
 storybook-static/
 
+# marketing-assets submodule copied into public/ at build time (see deploy.yml)
+public/marketing-assets/
+
 # Environment variables
 .env
 .env.local

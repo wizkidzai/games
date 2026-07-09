@@ -32,6 +32,8 @@ function serveMarketingAssets(): Plugin {
 export default defineConfig({
   plugins: [react(), serveMarketingAssets()],
   base: '/games/echo-bots/',
+  // Fixed port so booth-kiosk's dev proxy can route /games/echo-bots/ here.
+  server: { port: 5175, strictPort: true },
   // Serves the monorepo root public/ so gameRegistry.json etc. are reachable.
   // marketing-assets/ is handled by the serveMarketingAssets plugin above (dev)
   // and by the CI copy step (production).

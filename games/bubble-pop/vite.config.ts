@@ -24,6 +24,8 @@ export default defineConfig({
   plugins: [react(), serveMarketingAssets()],
   base: '/games/bubble-pop/',
   publicDir: path.resolve(__dirname, '../../public'),
+  // Fixed port so booth-kiosk's dev proxy can route /games/bubble-pop/ here.
+  server: { port: 5176, strictPort: true },
   resolve: { alias: { '@': path.resolve(__dirname, './src') } },
   build: {
     outDir: 'dist',

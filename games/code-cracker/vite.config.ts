@@ -23,6 +23,8 @@ function serveMarketingAssets(): Plugin {
 export default defineConfig({
   plugins: [react(), serveMarketingAssets()],
   base: '/games/code-cracker/',
+  // Fixed port so booth-kiosk's dev proxy can route /games/code-cracker/ here.
+  server: { port: 5177, strictPort: true },
   publicDir: path.resolve(__dirname, '../../public'),
   resolve: { alias: { '@': path.resolve(__dirname, './src') } },
   build: {

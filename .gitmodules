@@ -1,0 +1,3 @@
+[submodule "marketing-assets"]
+	path = marketing-assets
+	url = https://github.com/wizkidzai/marketing-assets.git
