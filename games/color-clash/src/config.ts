@@ -2,7 +2,7 @@
 export const CONFIG = {
   soundOn: true,
   idleSeconds: 60,   // auto-return to attract after this many idle seconds
-  roundSeconds: 45,  // quiz / math round length (code-cracker always gets 90s)
+  roundSeconds: 20,  // quiz / math round length (code-cracker always gets 90s)
 
   // Arcade button → keyboard key mappings.
   // Big red is always Space/Enter too; blue is ArrowLeft; yellow is ArrowRight.
