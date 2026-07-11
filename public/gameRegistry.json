@@ -15,7 +15,7 @@
       "featured": true
     },
     {
-      "id": "bubble-pop",
+      "id": "math-pop",
       "name": "Math Pop",
       "description": "Hi, I'm Green Frog! How fast can you do Math in your mind?",
       "mascotID": 3,
@@ -39,7 +39,7 @@
       "featured": true
     },
     {
-      "id": "speedy-fingers",
+      "id": "blast-off",
       "name": "Blast Off",
       "description": "Hi, I'm Red Fox! Do you want to see who's quicker?",
       "mascotID": 2,
@@ -51,7 +51,7 @@
       "featured": true
     },
     {
-      "id": "color-clash",
+      "id": "robo-quiz",
       "name": "Robo Quiz",
       "description": "Hi, I'm Peacock Pride. I challenge you to a STEM trivia!",
       "mascotID": 0,

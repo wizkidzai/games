@@ -29,10 +29,10 @@ apps/
   admin-card-config/    — Admin tool to configure NTAG213 RFID cards
 games/
   echo-bots/            — Sequence memory game (mascotID=5, Blue Jay)
-  bubble-pop/           — True/false math game (mascotID=3, Green Frog)
+  math-pop/             — True/false math game (mascotID=3, Green Frog)
   code-cracker/         — Robot programming puzzle (mascotID=4, Yellow Fawn)
-  speedy-fingers/       — Reaction-time game (mascotID=2, Red Fox)
-  color-clash/          — STEM trivia game (mascotID=0, Peacock Pride)
+  blast-off/            — Reaction-time game (mascotID=2, Red Fox)
+  robo-quiz/            — STEM trivia game (mascotID=0, Peacock Pride)
 packages/
   design-system/        — CSS tokens, Tailwind colors, shared UI components
   mascot-system/        — Mascot metadata, personalities, dialogue

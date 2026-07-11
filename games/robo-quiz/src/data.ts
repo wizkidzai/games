@@ -2,7 +2,7 @@ export const BLUE   = '#0aa4eb', BLUE_D   = '#0888c4';
 export const RED    = '#ff4747', RED_D    = '#e62e2e';
 export const YELLOW = '#ffc832', YELLOW_D = '#e8ad12';
 
-export const GAME_ID     = 'color-clash';
+export const GAME_ID     = 'robo-quiz';
 export const GAME_TITLE  = 'Robo Quiz';
 export const GAME_TAG    = "Hi, I'm Peacock Pride. I challenge you to a STEM trivia!";
 export const THEME_COLOR = '#006464';

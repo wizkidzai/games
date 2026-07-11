@@ -87,7 +87,7 @@ export default class App extends Component<Record<string, never>, AppState> {
     window.addEventListener('keydown', this.onKeyDown);
     window.addEventListener('keyup', this.onKeyUp);
     this._idleIv = setInterval(() => {
-      if (this.state.screen !== 'attract' && Date.now() - this._lastInput > CONFIG.idleSeconds * 1000) this.goAttract();
+      if (Date.now() - this._lastInput > CONFIG.idleSeconds * 1000) this.goKiosk();
     }, 1000);
     void tryReadPlayerUID().then(uid => { if (uid) this.setState({ playerUID: uid }); });
   }
@@ -144,7 +144,6 @@ export default class App extends Component<Record<string, never>, AppState> {
     this._timeouts.forEach(clearTimeout); this._timeouts = []; clearInterval(this._tickIv);
     clearInterval(this._goHoldIv); this._goHoldIv = undefined;
   }
-  goAttract = () => { this.clearTimers(); this.setState({ screen: 'attract' }); };
 
   onGoPressStart = () => {
     this._lastInput = Date.now();
@@ -393,7 +392,7 @@ export default class App extends Component<Record<string, never>, AppState> {
     return (
       <div style={{ position: 'fixed', inset: 0, background: 'var(--seasalt)', overflow: 'hidden', fontFamily: 'var(--font-body)', userSelect: 'none' }}>
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-            {s.screen === 'attract' && <ScreenAttract onPress={() => this.press('A')} gameTitle={GAME_TITLE} gameTag={GAME_TAG} mascotSrc={MASCOT_SRC} themeColor={THEME_COLOR} />}
+            {s.screen === 'attract' && <ScreenAttract onPress={() => this.press('A')} gameTitle={GAME_TITLE} gameTag={GAME_TAG} mascotSrc={MASCOT_SRC} themeColor={THEME_COLOR} countdownSeconds={CONFIG.attractCountdownSeconds} />}
             {s.screen === 'robot' && (
               <ScreenRobot
                 scoreText={s.score.toLocaleString() + ' pts'}

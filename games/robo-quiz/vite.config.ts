@@ -22,10 +22,10 @@ function serveMarketingAssets(): Plugin {
 
 export default defineConfig({
   plugins: [react(), serveMarketingAssets()],
-  base: '/games/bubble-pop/',
+  base: '/games/robo-quiz/',
+  // Fixed port so booth-kiosk's dev proxy can route /games/robo-quiz/ here.
+  server: { port: 5178, strictPort: true },
   publicDir: path.resolve(__dirname, '../../public'),
-  // Fixed port so booth-kiosk's dev proxy can route /games/bubble-pop/ here.
-  server: { port: 5176, strictPort: true },
   resolve: { alias: { '@': path.resolve(__dirname, './src') } },
   build: {
     outDir: 'dist',

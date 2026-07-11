@@ -1,8 +1,9 @@
 // Booth setup — edit before the event.
 export const CONFIG = {
   soundOn: true,
-  idleSeconds: 60,   // auto-return to attract after this many idle seconds
-  roundSeconds: 45,  // quiz / math round length (code-cracker always gets 90s)
+  idleSeconds: 30,   // no input for this long on any screen → return to kiosk
+  roundSeconds: 30,  // round length
+  attractCountdownSeconds: 5, // landing page auto-starts the game after this many seconds
 
   // Arcade button → keyboard key mappings, named by physical button color.
   keyRed: '1',    // big red button (also Space/Enter/'b')

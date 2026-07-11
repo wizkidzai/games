@@ -1,5 +1,7 @@
-// Generic attract / splash screen — tap/press any button to start.
-// Logo and mascot image are passed as props so each game can customise.
+// Generic attract / splash screen — tap/press any button to start, or wait
+// out the countdown and it starts on its own.
+
+import { useEffect, useRef, useState } from 'react';
 
 // Sizes are expressed in vmin (1vmin = 1% of the shorter screen edge) so every
 // screen fills the actual display instead of scaling a fixed-aspect canvas
@@ -13,11 +15,24 @@ interface Props {
   gameTag: string;
   mascotSrc: string;
   themeColor: string;
+  countdownSeconds: number;
 }
 
 const FLOAT = 'wkBob 2.6s cubic-bezier(0.22,1,0.36,1) infinite';
 
-export default function ScreenAttract({ onPress, gameTitle, gameTag, mascotSrc, themeColor }: Props) {
+export default function ScreenAttract({ onPress, gameTitle, gameTag, mascotSrc, themeColor, countdownSeconds }: Props) {
+  const [countdown, setCountdown] = useState(countdownSeconds);
+  // Ref so the auto-start effect always calls the latest onPress without
+  // restarting the countdown when the parent re-renders.
+  const onPressRef = useRef(onPress);
+  useEffect(() => { onPressRef.current = onPress; }, [onPress]);
+
+  useEffect(() => {
+    if (countdown <= 0) { onPressRef.current(); return; }
+    const t = setTimeout(() => setCountdown(c => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [countdown]);
+
   return (
     <div
       onClick={onPress}
@@ -55,6 +70,9 @@ export default function ScreenAttract({ onPress, gameTitle, gameTag, mascotSrc, 
         color: 'var(--fawn-500)', animation: 'wkBlink 1.6s ease infinite', textAlign: 'center',
       }}>
         Press the big button to play!
+      </div>
+      <div style={{ fontSize: vmin(28), fontWeight: 600, color: 'rgba(250,250,250,0.75)', textAlign: 'center' }}>
+        Starting automatically in {countdown}…
       </div>
       <div style={{
         position: 'absolute', bottom: vmin(140), left: 0, right: 0,

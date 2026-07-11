@@ -66,8 +66,8 @@ export default class App extends Component<Record<string, never>, AppState> {
   componentDidMount() {
     window.addEventListener('keydown', this.onKey);
     this._idleIv = setInterval(() => {
-      if (this.state.screen !== 'attract' && Date.now() - this._lastInput > CONFIG.idleSeconds * 1000) {
-        this.goAttract();
+      if (Date.now() - this._lastInput > CONFIG.idleSeconds * 1000) {
+        this.goKiosk();
       }
     }, 1000);
     // RFID: read player UID silently; no-ops when hardware absent
@@ -98,8 +98,6 @@ export default class App extends Component<Record<string, never>, AppState> {
     this._timeouts = [];
     clearInterval(this._tickIv);
   }
-
-  goAttract = () => { this.clearTimers(); this.setState({ screen: 'attract' }); };
 
   async endGame(score: number) {
     this.clearTimers();
@@ -256,6 +254,7 @@ export default class App extends Component<Record<string, never>, AppState> {
               gameTag={GAME_TAG}
               mascotSrc={MASCOT_SRC}
               themeColor={THEME_COLOR}
+              countdownSeconds={CONFIG.attractCountdownSeconds}
             />
           )}
 

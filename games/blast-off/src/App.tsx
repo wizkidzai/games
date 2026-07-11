@@ -55,7 +55,7 @@ export default class App extends Component<Record<string, never>, AppState> {
   componentDidMount() {
     window.addEventListener('keydown', this.onKey);
     this._idleIv = setInterval(() => {
-      if (this.state.screen !== 'attract' && Date.now() - this._lastInput > CONFIG.idleSeconds * 1000) this.goAttract();
+      if (Date.now() - this._lastInput > CONFIG.idleSeconds * 1000) this.goKiosk();
     }, 1000);
     void tryReadPlayerUID().then(uid => { if (uid) this.setState({ playerUID: uid }); });
   }
@@ -76,7 +76,6 @@ export default class App extends Component<Record<string, never>, AppState> {
 
   after(ms: number, fn: () => void) { const t = setTimeout(fn, ms); this._timeouts.push(t); return t; }
   clearTimers() { this._timeouts.forEach(clearTimeout); this._timeouts = []; }
-  goAttract = () => { this.clearTimers(); this.setState({ screen: 'attract' }); };
 
   async endGame(score: number) {
     this.clearTimers();
@@ -203,7 +202,7 @@ export default class App extends Component<Record<string, never>, AppState> {
     return (
       <div style={{ position: 'fixed', inset: 0, background: shellBg, transition: 'background 400ms ease', overflow: 'hidden', fontFamily: 'var(--font-body)', userSelect: 'none' }}>
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-            {s.screen === 'attract' && <ScreenAttract onPress={() => this.press('A')} gameTitle={GAME_TITLE} gameTag={GAME_TAG} mascotSrc={MASCOT_SRC} themeColor={THEME_COLOR} />}
+            {s.screen === 'attract' && <ScreenAttract onPress={() => this.press('A')} gameTitle={GAME_TITLE} gameTag={GAME_TAG} mascotSrc={MASCOT_SRC} themeColor={THEME_COLOR} countdownSeconds={CONFIG.attractCountdownSeconds} />}
             {s.screen === 'reaction' && (
               <ScreenReaction onPress={() => { this._lastInput = Date.now(); this.reactPress(); }} rBg={rBg} scoreText={s.score.toLocaleString() + ' pts'} rDots={rDots} rocketY={ph === 'hit' ? -60 : 0} rBigText={rBigText} rSubText={rSubText} rTextAnim={ph === 'go' ? 'wkBlink 0.5s ease infinite' : 'none'} />
             )}

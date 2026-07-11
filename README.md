@@ -28,10 +28,10 @@ apps/
   admin-card-config/    — Admin tool to configure RFID cards
 games/
   echo-bots/            — Sequence memory game
-  bubble-pop/           — True/false math game
+  math-pop/             — True/false math game
   code-cracker/         — Robot programming puzzle
-  speedy-fingers/       — Reaction-time game
-  color-clash/          — STEM trivia game
+  blast-off/            — Reaction-time game
+  robo-quiz/            — STEM trivia game
 packages/
   design-system/        — Shared UI components, Tailwind tokens, CSS
   mascot-system/        — Mascot metadata and personalities

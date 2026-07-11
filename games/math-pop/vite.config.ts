@@ -22,10 +22,10 @@ function serveMarketingAssets(): Plugin {
 
 export default defineConfig({
   plugins: [react(), serveMarketingAssets()],
-  base: '/games/speedy-fingers/',
-  // Fixed port so booth-kiosk's dev proxy can route /games/speedy-fingers/ here.
-  server: { port: 5179, strictPort: true },
+  base: '/games/math-pop/',
   publicDir: path.resolve(__dirname, '../../public'),
+  // Fixed port so booth-kiosk's dev proxy can route /games/math-pop/ here.
+  server: { port: 5176, strictPort: true },
   resolve: { alias: { '@': path.resolve(__dirname, './src') } },
   build: {
     outDir: 'dist',

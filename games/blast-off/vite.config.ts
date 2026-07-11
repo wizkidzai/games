@@ -22,9 +22,9 @@ function serveMarketingAssets(): Plugin {
 
 export default defineConfig({
   plugins: [react(), serveMarketingAssets()],
-  base: '/games/color-clash/',
-  // Fixed port so booth-kiosk's dev proxy can route /games/color-clash/ here.
-  server: { port: 5178, strictPort: true },
+  base: '/games/blast-off/',
+  // Fixed port so booth-kiosk's dev proxy can route /games/blast-off/ here.
+  server: { port: 5179, strictPort: true },
   publicDir: path.resolve(__dirname, '../../public'),
   resolve: { alias: { '@': path.resolve(__dirname, './src') } },
   build: {

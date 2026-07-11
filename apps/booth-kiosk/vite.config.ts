@@ -56,10 +56,10 @@ export default defineConfig({
     // the deploy workflow assembles all games under /games/ as static files.
     proxy: {
       '/games/echo-bots': { target: 'http://localhost:5175', ws: true },
-      '/games/bubble-pop': { target: 'http://localhost:5176', ws: true },
+      '/games/math-pop': { target: 'http://localhost:5176', ws: true },
       '/games/code-cracker': { target: 'http://localhost:5177', ws: true },
-      '/games/color-clash': { target: 'http://localhost:5178', ws: true },
-      '/games/speedy-fingers': { target: 'http://localhost:5179', ws: true },
+      '/games/robo-quiz': { target: 'http://localhost:5178', ws: true },
+      '/games/blast-off': { target: 'http://localhost:5179', ws: true },
     },
   },
 });
