@@ -15,10 +15,8 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[--color-bg] text-[--color-text] font-ui">
-      <main className="flex-1">
-        <MainMenu />
-      </main>
+    <div className="fixed inset-0 overflow-hidden bg-[--color-bg] text-[--color-text] font-ui">
+      <MainMenu />
     </div>
   );
 }

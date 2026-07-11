@@ -10,6 +10,20 @@ const KEY_SELECT = new Set([CONFIG.keyRed, ' ', 'Enter', 'b']);
 const KEY_PREV = new Set([CONFIG.keyBlue, 'ArrowLeft', 'a']);
 const KEY_NEXT = new Set([CONFIG.keyYellow, 'ArrowRight', 'c']);
 
+// See games/*/src/components/ScreenAttract.tsx for why sizes are expressed
+// in vmin via this helper (1vmin = 1% of the shorter screen edge, so the
+// menu fills the actual kiosk display instead of scaling a fixed-aspect
+// canvas and letterboxing). Divide by 10.8 to preserve each value's
+// original look at the 1280x1080 design reference (1080 / 100 = 10.8).
+const vmin = (px: number) => `${(px / 10.8).toFixed(2)}vmin`;
+
+// Element sizes: floor at the original fixed-px value (so nothing gets
+// smaller than the pre-dynamic design on a browser window shorter than the
+// 1080px reference — a common case since the kiosk isn't always viewed
+// fullscreen), scale via vmin above that, and cap at 1.6x so things don't
+// balloon on very large displays.
+const size = (px: number) => `clamp(${px}px, ${vmin(px)}, ${Math.round(px * 1.6)}px)`;
+
 export default function MainMenu() {
   const [games, setGames] = useState<Game[]>([]);
   const [selected, setSelected] = useState(0);
@@ -61,41 +75,48 @@ export default function MainMenu() {
   const themeColor = game.themeColor ?? getMascotByID(game.mascotID).color;
 
   return (
-    <div className="max-w-4xl mx-auto px-8 py-10 flex flex-col items-center">
+    <div
+      style={{
+        position: 'absolute', inset: 0, overflow: 'hidden',
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
+        padding: `${size(40)} ${size(90)}`,
+      }}
+    >
       {/* Corner brand mark — fixed to the viewport (not the centered content
           column) so it sits in the extreme top-left of the physical screen,
           and out of the flow so it never pushes the game showcase down. */}
       <img
         src="/marketing-assets/logo/wiz-kidz-logo-teal-289x128.png"
         alt="Wiz Kidz"
-        style={{ position: 'fixed', top: 16, left: 16, height: 64, zIndex: 10 }}
+        style={{ position: 'fixed', top: size(16), left: size(16), height: size(64), zIndex: 10 }}
       />
 
       {/* Selected game showcase */}
       <div
-        className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+        className="bg-white border border-gray-100 overflow-hidden"
+        style={{ width: '100%', maxWidth: vmin(900), borderRadius: size(16), boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}
         aria-live="polite"
       >
         {game.mascotImage && (
           <div
             className="flex items-center justify-center"
-            style={{ background: themeColor + '18', height: 220 }}
+            style={{ background: themeColor + '18', height: size(220) }}
           >
             <img
               src={game.mascotImage}
               alt=""
-              style={{ height: 160, width: 160, objectFit: 'contain' }}
+              style={{ height: size(160), width: size(160), objectFit: 'contain' }}
             />
           </div>
         )}
-        <div className="p-6 text-center">
-          <h2 className="text-2xl font-bold font-display text-gray-800 mb-2">{game.name}</h2>
-          <p className="text-gray-500 text-base leading-snug">{game.description}</p>
+        <div className="text-center" style={{ padding: size(24) }}>
+          <h2 className="font-bold font-display text-gray-800" style={{ fontSize: size(24), marginBottom: size(8) }}>{game.name}</h2>
+          <p className="text-gray-500 leading-snug" style={{ fontSize: size(16) }}>{game.description}</p>
         </div>
       </div>
 
       {/* Dots showing position among games */}
-      <div className="flex gap-2 mt-6" role="tablist" aria-label="Games">
+      <div style={{ display: 'flex', gap: size(8), marginTop: size(24) }} role="tablist" aria-label="Games">
         {games.map((g, i) => (
           <span
             key={g.id}
@@ -103,8 +124,8 @@ export default function MainMenu() {
             aria-selected={i === selected}
             className="rounded-full transition-all"
             style={{
-              width: i === selected ? 24 : 10,
-              height: 10,
+              width: i === selected ? size(24) : size(10),
+              height: size(10),
               background: i === selected ? themeColor : '#D1D5DB',
             }}
           />
@@ -112,24 +133,33 @@ export default function MainMenu() {
       </div>
 
       {/* 3-button legend — the only supported input */}
-      <div className="flex items-center justify-center gap-10 mt-10">
-        <div className="flex flex-col items-center gap-2">
-          <div className="w-14 h-14 rounded-full bg-wk-blue shadow-[0_6px_0_#0888c4] flex items-center justify-center text-white text-2xl font-bold">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: size(40), marginTop: size(40) }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: size(8) }}>
+          <div
+            className="rounded-full bg-wk-blue flex items-center justify-center text-white font-bold"
+            style={{ width: size(56), height: size(56), boxShadow: `0 ${size(6)} 0 #0888c4`, fontSize: size(24) }}
+          >
             ◀
           </div>
-          <span className="text-sm font-semibold text-gray-600">Previous</span>
+          <span className="font-semibold text-gray-600" style={{ fontSize: size(14) }}>Previous</span>
         </div>
-        <div className="flex flex-col items-center gap-2">
-          <div className="w-20 h-20 rounded-full bg-wk-red shadow-[0_8px_0_#e62e2e] flex items-center justify-center text-white text-3xl font-bold">
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: size(8) }}>
+          <div
+            className="rounded-full bg-wk-red flex items-center justify-center text-white font-bold"
+            style={{ width: size(80), height: size(80), boxShadow: `0 ${size(8)} 0 #e62e2e`, fontSize: size(30) }}
+          >
             ●
           </div>
-          <span className="text-sm font-semibold text-gray-600">Play {game.name}</span>
+          <span className="font-semibold text-gray-600" style={{ fontSize: size(14) }}>Play {game.name}</span>
         </div>
-        <div className="flex flex-col items-center gap-2">
-          <div className="w-14 h-14 rounded-full bg-wk-yellow shadow-[0_6px_0_#e8ad12] flex items-center justify-center text-white text-2xl font-bold">
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: size(8) }}>
+          <div
+            className="rounded-full bg-wk-yellow flex items-center justify-center text-white font-bold"
+            style={{ width: size(56), height: size(56), boxShadow: `0 ${size(6)} 0 #e8ad12`, fontSize: size(24) }}
+          >
             ▶
           </div>
-          <span className="text-sm font-semibold text-gray-600">Next</span>
+          <span className="font-semibold text-gray-600" style={{ fontSize: size(14) }}>Next</span>
         </div>
       </div>
     </div>
