@@ -39,6 +39,7 @@ interface AppState {
   rbBatteries: Battery[];
   rbBump: boolean; rbFlash: string;
   rbProg: RobotCmd[]; rbRun: boolean; rbStep: number;
+  rbGoHoldSecLeft: number | null;
   // result state
   finalScore: number;
   resultPhase: 'entry' | 'board';
@@ -54,7 +55,7 @@ export default class App extends Component<Record<string, never>, AppState> {
   state: AppState = {
     screen: 'attract', score: 0, timeLeft: 0, timeTotal: 90,
     rbLevel: 0, rbX: 0, rbY: 4, rbRot: 0, rbBatteries: [], rbBump: false, rbFlash: '',
-    rbProg: [], rbRun: false, rbStep: -1,
+    rbProg: [], rbRun: false, rbStep: -1, rbGoHoldSecLeft: null,
     finalScore: 0, resultPhase: 'board',
     initials: ['A', 'A', 'A'], initSlot: 0, savedName: '',
     board: [], confettiPieces: [],
@@ -77,6 +78,11 @@ export default class App extends Component<Record<string, never>, AppState> {
   private static readonly HOLD_MS = 500;
   private _pressStart: Partial<Record<'A' | 'B' | 'C', number>> = {};
 
+  // On-screen GO! button: press-and-hold for CONFIG.goHoldSeconds auto-launches
+  // the program without needing to release (separate from the physical red
+  // button's tap-vs-hold overload above).
+  private _goHoldIv?: ReturnType<typeof setInterval>;
+
   componentDidMount() {
     window.addEventListener('keydown', this.onKeyDown);
     window.addEventListener('keyup', this.onKeyUp);
@@ -94,9 +100,9 @@ export default class App extends Component<Record<string, never>, AppState> {
   }
 
   logicalKeyFor(k: string): 'A' | 'B' | 'C' | null {
-    if (k === ' ' || k === 'Enter' || k === 'b' || k === CONFIG.keyA) return 'A';
-    if (k === 'ArrowLeft' || k === 'a' || k === CONFIG.keyB) return 'B';
-    if (k === 'ArrowRight' || k === 'c' || k === CONFIG.keyC) return 'C';
+    if (k === ' ' || k === 'Enter' || k === 'b' || k === CONFIG.keyRed) return 'A';
+    if (k === 'ArrowLeft' || k === 'a' || k === CONFIG.keyBlue) return 'B';
+    if (k === 'ArrowRight' || k === 'c' || k === CONFIG.keyYellow) return 'C';
     return null;
   }
 
@@ -134,8 +140,38 @@ export default class App extends Component<Record<string, never>, AppState> {
   };
 
   after(ms: number, fn: () => void) { const t = setTimeout(fn, ms); this._timeouts.push(t); return t; }
-  clearTimers() { this._timeouts.forEach(clearTimeout); this._timeouts = []; clearInterval(this._tickIv); }
+  clearTimers() {
+    this._timeouts.forEach(clearTimeout); this._timeouts = []; clearInterval(this._tickIv);
+    clearInterval(this._goHoldIv); this._goHoldIv = undefined;
+  }
   goAttract = () => { this.clearTimers(); this.setState({ screen: 'attract' }); };
+
+  onGoPressStart = () => {
+    this._lastInput = Date.now();
+    const s = this.state;
+    if (s.rbRun || s.rbFlash || !s.rbProg.length) return; // not ready to launch
+    let secLeft = CONFIG.goHoldSeconds;
+    this.setState({ rbGoHoldSecLeft: secLeft });
+    this.sfx.blip();
+    this._goHoldIv = setInterval(() => {
+      secLeft -= 1;
+      if (secLeft <= 0) {
+        clearInterval(this._goHoldIv);
+        this._goHoldIv = undefined;
+        this.setState({ rbGoHoldSecLeft: null });
+        this.runProgram();
+      } else {
+        this.setState({ rbGoHoldSecLeft: secLeft });
+      }
+    }, 1000);
+  };
+
+  onGoPressEnd = () => {
+    if (!this._goHoldIv) return;
+    clearInterval(this._goHoldIv);
+    this._goHoldIv = undefined;
+    this.setState({ rbGoHoldSecLeft: null });
+  };
 
   startClock(seconds: number, onEnd: () => void) {
     this._clockEnd = Date.now() + seconds * 1000;
@@ -346,6 +382,13 @@ export default class App extends Component<Record<string, never>, AppState> {
     });
 
     const goReady = !s.rbRun && !s.rbFlash && s.rbProg.length > 0;
+    const rbGoText = s.rbRun
+      ? 'Running…'
+      : s.rbGoHoldSecLeft != null
+        ? `Launching in ${s.rbGoHoldSecLeft}…`
+        : goReady
+          ? `Press & hold ${CONFIG.goHoldSeconds} sec to launch!`
+          : 'Add steps first!';
 
     return (
       <div style={{ position: 'fixed', inset: 0, background: 'var(--seasalt)', overflow: 'hidden', fontFamily: 'var(--font-body)', userSelect: 'none' }}>
@@ -361,10 +404,11 @@ export default class App extends Component<Record<string, never>, AppState> {
                 onAddL={() => { this._lastInput = Date.now(); this.addCmd('L'); }}
                 onAddF={() => { this._lastInput = Date.now(); this.addCmd('F'); }}
                 onAddR={() => { this._lastInput = Date.now(); this.addCmd('R'); }}
-                onGo={() => { this._lastInput = Date.now(); this.runProgram(); }}
+                onGoDown={this.onGoPressStart}
+                onGoUp={this.onGoPressEnd}
                 rbGoBg={s.rbRun ? '#8b9191' : goReady ? '#ff4747' : '#c9cdcd'}
                 rbGoShadow={s.rbRun ? '#6f7575' : goReady ? '#e62e2e' : '#a9adad'}
-                rbGoText={s.rbRun ? 'Running…' : '▶ GO!'}
+                rbGoText={rbGoText}
                 rbCells={cells}
                 rbTransform={`translate(${vmin(s.rbX * 108)}, ${vmin(s.rbY * 108)}) rotate(${s.rbRot}deg)`}
                 rbShakeAnim={s.rbBump ? 'wkShake 320ms ease' : 'none'}

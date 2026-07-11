@@ -21,7 +21,8 @@ interface Props {
   onAddL: () => void;
   onAddF: () => void;
   onAddR: () => void;
-  onGo: () => void;
+  onGoDown: () => void;
+  onGoUp: () => void;
   rbGoBg: string;
   rbGoShadow: string;
   rbGoText: string;
@@ -34,7 +35,7 @@ interface Props {
 
 export default function ScreenRobot({
   scoreText, timerPct, timeText, timeColor, rbLevelText,
-  rbProgSlots, onUndo, onAddL, onAddF, onAddR, onGo, rbGoBg, rbGoShadow, rbGoText,
+  rbProgSlots, onUndo, onAddL, onAddF, onAddR, onGoDown, onGoUp, rbGoBg, rbGoShadow, rbGoText,
   rbCells, rbTransform, rbShakeAnim, rbFlashShow, rbFlashText,
 }: Props) {
   return (
@@ -79,8 +80,16 @@ export default function ScreenRobot({
               </div>
             ))}
           </div>
-          <div onClick={onGo} style={{ height: vmin(84), borderRadius: 'var(--radius-pill)', background: rbGoBg, boxShadow: `0 ${vmin(8)} 0 ${rbGoShadow}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'background 150ms' }}>
-            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: vmin(34), color: 'var(--seasalt)' }}>{rbGoText}</div>
+          <div
+            onMouseDown={onGoDown}
+            onMouseUp={onGoUp}
+            onMouseLeave={onGoUp}
+            onTouchStart={e => { e.preventDefault(); onGoDown(); }}
+            onTouchEnd={onGoUp}
+            onTouchCancel={onGoUp}
+            style={{ minHeight: vmin(84), borderRadius: 'var(--radius-pill)', background: rbGoBg, boxShadow: `0 ${vmin(8)} 0 ${rbGoShadow}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'background 150ms', padding: `${vmin(10)} ${vmin(24)}`, touchAction: 'none' }}
+          >
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: vmin(26), lineHeight: 1.2, color: 'var(--seasalt)', textAlign: 'center' }}>{rbGoText}</div>
           </div>
         </div>
 
