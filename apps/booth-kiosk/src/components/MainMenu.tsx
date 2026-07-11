@@ -1,14 +1,14 @@
 import { useEffect, useState, useCallback } from 'react';
 import { getMascotByID } from '@wizkidz/mascot-system';
 import type { Game } from '../types';
+import { CONFIG } from '../config';
 
 // Physical booth controller: 3 buttons only (red / blue / yellow).
-// Hardware emits keys '1' (red), '2' (blue), '3' (yellow); keyboard fallback
-// mirrors every other game in the monorepo: Space/Enter/'b', ArrowLeft/'a',
-// ArrowRight/'c'.
-const KEY_SELECT = new Set(['1', ' ', 'Enter', 'b']);
-const KEY_PREV = new Set(['2', 'ArrowLeft', 'a']);
-const KEY_NEXT = new Set(['3', 'ArrowRight', 'c']);
+// Keyboard fallback mirrors every other game in the monorepo:
+// Space/Enter/'b', ArrowLeft/'a', ArrowRight/'c'.
+const KEY_SELECT = new Set([CONFIG.keyRed, ' ', 'Enter', 'b']);
+const KEY_PREV = new Set([CONFIG.keyBlue, 'ArrowLeft', 'a']);
+const KEY_NEXT = new Set([CONFIG.keyYellow, 'ArrowRight', 'c']);
 
 export default function MainMenu() {
   const [games, setGames] = useState<Game[]>([]);
@@ -45,13 +45,13 @@ export default function MainMenu() {
     return () => window.removeEventListener('keydown', onKey);
   }, [games, launch]);
 
-  // Auto-advance the carousel every 3s; any manual prev/next press above
-  // changes `selected`, which resets this timer so it doesn't fight the player.
+  // Auto-advance the carousel; any manual prev/next press above changes
+  // `selected`, which resets this timer so it doesn't fight the player.
   useEffect(() => {
     if (games.length <= 1) return;
     const t = setTimeout(() => {
       setSelected(i => (i + 1) % games.length);
-    }, 3000);
+    }, CONFIG.carouselSeconds * 1000);
     return () => clearTimeout(t);
   }, [selected, games]);
 

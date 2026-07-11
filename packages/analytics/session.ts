@@ -1,16 +1,19 @@
-const INACTIVITY_MS = 30 * 60 * 1000; // 30 minutes
+const DEFAULT_INACTIVITY_MS = 30 * 60 * 1000; // 30 minutes
 
 export interface SessionConfig {
   onTimeout: () => void;
+  timeoutMs?: number;
 }
 
 export class SessionManager {
   private lastActivity: number = Date.now();
   private timer: ReturnType<typeof setInterval> | null = null;
   private onTimeout: () => void;
+  private timeoutMs: number;
 
   constructor(config: SessionConfig) {
     this.onTimeout = config.onTimeout;
+    this.timeoutMs = config.timeoutMs ?? DEFAULT_INACTIVITY_MS;
   }
 
   start(): void {
@@ -34,7 +37,7 @@ export class SessionManager {
   };
 
   private checkInactivity(): void {
-    if (Date.now() - this.lastActivity > INACTIVITY_MS) {
+    if (Date.now() - this.lastActivity > this.timeoutMs) {
       this.onTimeout();
     }
   }

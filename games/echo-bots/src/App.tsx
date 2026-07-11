@@ -83,9 +83,9 @@ export default class App extends Component<Record<string, never>, AppState> {
   onKey = (e: KeyboardEvent) => {
     this._lastInput = Date.now();
     const k = e.key;
-    if (k === ' ' || k === 'Enter' || k === 'b' || k === CONFIG.keyA) { e.preventDefault(); this.press('A'); }
-    else if (k === 'ArrowLeft'  || k === 'a' || k === CONFIG.keyB)    { e.preventDefault(); this.press('B'); }
-    else if (k === 'ArrowRight' || k === 'c' || k === CONFIG.keyC)    { e.preventDefault(); this.press('C'); }
+    if (k === ' ' || k === 'Enter' || k === 'b' || k === CONFIG.keyRed) { e.preventDefault(); this.press('A'); }
+    else if (k === 'ArrowLeft'  || k === 'a' || k === CONFIG.keyBlue)   { e.preventDefault(); this.press('B'); }
+    else if (k === 'ArrowRight' || k === 'c' || k === CONFIG.keyYellow) { e.preventDefault(); this.press('C'); }
   };
 
   after(ms: number, fn: () => void) {

@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import { SessionManager } from '@wizkidz/analytics';
 import MainMenu from './components/MainMenu';
+import { CONFIG } from './config';
 
 const sessionManager = new SessionManager({
   onTimeout: () => window.location.reload(),
+  timeoutMs: CONFIG.idleTimeoutMinutes * 60_000,
 });
 
 export default function App() {
