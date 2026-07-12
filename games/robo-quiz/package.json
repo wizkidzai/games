@@ -12,6 +12,7 @@
   "dependencies": {
     "@wizkidz/card-io": "workspace:*",
     "@wizkidz/design-system": "workspace:*",
+    "@wizkidz/game-utils": "workspace:*",
     "@wizkidz/leaderboard": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

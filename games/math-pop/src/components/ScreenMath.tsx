@@ -1,3 +1,4 @@
+import { tapOnce } from '@wizkidz/game-utils';
 import ProgressBar from './ProgressBar';
 
 // See ScreenAttract.tsx for why sizes are expressed in vmin via this helper.
@@ -41,11 +42,11 @@ export default function ScreenMath({
           <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: vmin(110), color: 'var(--text-strong)', letterSpacing: '0.02em' }}>{mExpr}</div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: vmin(30) }}>
-          <div onClick={onNo} style={{ background: 'var(--jay-100)', border: `${vmin(6)} solid var(--jay-500)`, borderRadius: 'var(--radius-lg)', padding: `${vmin(30)} ${vmin(20)}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: vmin(20), cursor: 'pointer', boxShadow: 'var(--shadow-sm)' }}>
+          <div {...tapOnce(onNo)} style={{ background: 'var(--jay-100)', border: `${vmin(6)} solid var(--jay-500)`, borderRadius: 'var(--radius-lg)', padding: `${vmin(30)} ${vmin(20)}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: vmin(20), cursor: 'pointer', boxShadow: 'var(--shadow-sm)', touchAction: 'none' }}>
             <div style={{ width: vmin(58), height: vmin(58), borderRadius: '50%', background: 'var(--jay-500)', boxShadow: `0 ${vmin(6)} 0 var(--jay-600)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: vmin(26) }}>◀</div>
             <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: vmin(44), color: 'var(--jay-ink)' }}>Nope!</div>
           </div>
-          <div onClick={onYes} style={{ background: 'var(--fawn-100)', border: `${vmin(6)} solid var(--fawn-500)`, borderRadius: 'var(--radius-lg)', padding: `${vmin(30)} ${vmin(20)}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: vmin(20), cursor: 'pointer', boxShadow: 'var(--shadow-sm)' }}>
+          <div {...tapOnce(onYes)} style={{ background: 'var(--fawn-100)', border: `${vmin(6)} solid var(--fawn-500)`, borderRadius: 'var(--radius-lg)', padding: `${vmin(30)} ${vmin(20)}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: vmin(20), cursor: 'pointer', boxShadow: 'var(--shadow-sm)', touchAction: 'none' }}>
             <div style={{ width: vmin(58), height: vmin(58), borderRadius: '50%', background: 'var(--fawn-500)', boxShadow: `0 ${vmin(6)} 0 var(--fawn-600)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: vmin(26) }}>▶</div>
             <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: vmin(44), color: 'var(--fawn-ink)' }}>Yes!</div>
           </div>

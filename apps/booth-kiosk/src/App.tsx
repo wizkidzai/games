@@ -15,7 +15,11 @@ export default function App() {
   }, []);
 
   return (
-    <div className="fixed inset-0 overflow-hidden bg-[--color-bg] text-[--color-text] font-ui">
+    <div
+      onContextMenu={e => e.preventDefault()}
+      className="fixed inset-0 overflow-hidden bg-[--color-bg] text-[--color-text] font-ui select-none"
+      style={{ WebkitTouchCallout: 'none' }}
+    >
       <MainMenu />
     </div>
   );

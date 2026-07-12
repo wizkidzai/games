@@ -138,6 +138,9 @@ importers:
       '@wizkidz/design-system':
         specifier: workspace:*
         version: link:../../packages/design-system
+      '@wizkidz/game-utils':
+        specifier: workspace:*
+        version: link:../../packages/game-utils
       '@wizkidz/mascot-system':
         specifier: workspace:*
         version: link:../../packages/mascot-system
@@ -184,6 +187,9 @@ importers:
       '@wizkidz/design-system':
         specifier: workspace:*
         version: link:../../packages/design-system
+      '@wizkidz/game-utils':
+        specifier: workspace:*
+        version: link:../../packages/game-utils
       '@wizkidz/leaderboard':
         specifier: workspace:*
         version: link:../../packages/leaderboard
@@ -218,6 +224,9 @@ importers:
       '@wizkidz/design-system':
         specifier: workspace:*
         version: link:../../packages/design-system
+      '@wizkidz/game-utils':
+        specifier: workspace:*
+        version: link:../../packages/game-utils
       '@wizkidz/leaderboard':
         specifier: workspace:*
         version: link:../../packages/leaderboard
@@ -252,6 +261,9 @@ importers:
       '@wizkidz/design-system':
         specifier: workspace:*
         version: link:../../packages/design-system
+      '@wizkidz/game-utils':
+        specifier: workspace:*
+        version: link:../../packages/game-utils
       '@wizkidz/leaderboard':
         specifier: workspace:*
         version: link:../../packages/leaderboard
@@ -286,6 +298,9 @@ importers:
       '@wizkidz/design-system':
         specifier: workspace:*
         version: link:../../packages/design-system
+      '@wizkidz/game-utils':
+        specifier: workspace:*
+        version: link:../../packages/game-utils
       '@wizkidz/leaderboard':
         specifier: workspace:*
         version: link:../../packages/leaderboard
@@ -320,6 +335,9 @@ importers:
       '@wizkidz/design-system':
         specifier: workspace:*
         version: link:../../packages/design-system
+      '@wizkidz/game-utils':
+        specifier: workspace:*
+        version: link:../../packages/game-utils
       '@wizkidz/leaderboard':
         specifier: workspace:*
         version: link:../../packages/leaderboard
@@ -358,7 +376,15 @@ importers:
 
   packages/design-system: {}
 
-  packages/game-utils: {}
+  packages/game-utils:
+    dependencies:
+      react:
+        specifier: ^19.0.0
+        version: 19.2.7
+    devDependencies:
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.2.17
 
   packages/leaderboard: {}
 

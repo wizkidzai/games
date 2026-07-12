@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { getMascotByID } from '@wizkidz/mascot-system';
+import { tapOnce } from '@wizkidz/game-utils';
 import type { Game } from '../types';
 import { CONFIG } from '../config';
 
@@ -37,6 +38,21 @@ export default function MainMenu() {
   const launch = useCallback((game: Game) => {
     window.location.href = `/games/${game.id}/`;
   }, []);
+
+  const goPrev = useCallback(() => {
+    setSelected(i => (i - 1 + games.length) % games.length);
+  }, [games.length]);
+
+  const goNext = useCallback(() => {
+    setSelected(i => (i + 1) % games.length);
+  }, [games.length]);
+
+  const play = useCallback(() => {
+    setSelected(i => {
+      launch(games[i]);
+      return i;
+    });
+  }, [games, launch]);
 
   useEffect(() => {
     if (games.length === 0) return;
@@ -132,12 +148,15 @@ export default function MainMenu() {
         ))}
       </div>
 
-      {/* 3-button legend — the only supported input */}
+      {/* 3-button legend — mirrors the physical booth controller, but also
+          doubles as a touch/click control so the same screen works on a
+          touchscreen kiosk. */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: size(40), marginTop: size(40) }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: size(8) }}>
           <div
-            className="rounded-full bg-wk-blue flex items-center justify-center text-white font-bold"
-            style={{ width: size(56), height: size(56), boxShadow: `0 ${size(6)} 0 #0888c4`, fontSize: size(24) }}
+            {...tapOnce(goPrev)}
+            className="rounded-full bg-wk-blue flex items-center justify-center text-white font-bold cursor-pointer"
+            style={{ width: size(56), height: size(56), boxShadow: `0 ${size(6)} 0 #0888c4`, fontSize: size(24), touchAction: 'none' }}
           >
             ◀
           </div>
@@ -145,8 +164,9 @@ export default function MainMenu() {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: size(8) }}>
           <div
-            className="rounded-full bg-wk-red flex items-center justify-center text-white font-bold"
-            style={{ width: size(80), height: size(80), boxShadow: `0 ${size(8)} 0 #e62e2e`, fontSize: size(30) }}
+            {...tapOnce(play)}
+            className="rounded-full bg-wk-red flex items-center justify-center text-white font-bold cursor-pointer"
+            style={{ width: size(80), height: size(80), boxShadow: `0 ${size(8)} 0 #e62e2e`, fontSize: size(30), touchAction: 'none' }}
           >
             ●
           </div>
@@ -154,8 +174,9 @@ export default function MainMenu() {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: size(8) }}>
           <div
-            className="rounded-full bg-wk-yellow flex items-center justify-center text-white font-bold"
-            style={{ width: size(56), height: size(56), boxShadow: `0 ${size(6)} 0 #e8ad12`, fontSize: size(24) }}
+            {...tapOnce(goNext)}
+            className="rounded-full bg-wk-yellow flex items-center justify-center text-white font-bold cursor-pointer"
+            style={{ width: size(56), height: size(56), boxShadow: `0 ${size(6)} 0 #e8ad12`, fontSize: size(24), touchAction: 'none' }}
           >
             ▶
           </div>

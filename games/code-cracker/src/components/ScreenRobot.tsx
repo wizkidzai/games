@@ -1,3 +1,4 @@
+import { pressOnce, tapOnce } from '@wizkidz/game-utils';
 import ProgressBar from './ProgressBar';
 
 // See ScreenAttract.tsx for why sizes are expressed in vmin via this helper.
@@ -58,7 +59,7 @@ export default function ScreenRobot({
           <div style={{ background: 'var(--surface-card)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', padding: `${vmin(18)} ${vmin(20)}`, display: 'flex', flexDirection: 'column', gap: vmin(12) }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: vmin(24), color: 'var(--text-strong)' }}>🧩 Your code</div>
-              <div onClick={onUndo} style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: vmin(20), color: 'var(--text-muted)', background: 'var(--gray-50)', border: `${vmin(2)} solid var(--gray-200)`, borderRadius: 'var(--radius-pill)', padding: `${vmin(6)} ${vmin(20)}`, cursor: 'pointer' }}>⌫ Undo</div>
+              <div {...tapOnce(onUndo)} style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: vmin(20), color: 'var(--text-muted)', background: 'var(--gray-50)', border: `${vmin(2)} solid var(--gray-200)`, borderRadius: 'var(--radius-pill)', padding: `${vmin(6)} ${vmin(20)}`, cursor: 'pointer', touchAction: 'none' }}>⌫ Undo</div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: vmin(8) }}>
               {rbProgSlots.map((ps, i) => (
@@ -74,19 +75,14 @@ export default function ScreenRobot({
               { label: 'Forward',   icon: '▲', onClick: onAddF, bg: 'var(--frog-100)', border: 'var(--frog-500)', ink: 'var(--frog-ink)' },
               { label: 'Turn right',icon: '↻', onClick: onAddR, bg: 'var(--fawn-100)', border: 'var(--fawn-500)', ink: 'var(--fawn-ink)' },
             ].map(b => (
-              <div key={b.label} onClick={b.onClick} style={{ height: vmin(86), borderRadius: 'var(--radius-md)', background: b.bg, border: `${vmin(4)} solid ${b.border}`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: vmin(2), cursor: 'pointer', boxShadow: 'var(--shadow-xs)' }}>
+              <div key={b.label} {...tapOnce(b.onClick)} style={{ height: vmin(86), borderRadius: 'var(--radius-md)', background: b.bg, border: `${vmin(4)} solid ${b.border}`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: vmin(2), cursor: 'pointer', boxShadow: 'var(--shadow-xs)', touchAction: 'none' }}>
                 <div style={{ fontSize: vmin(30), lineHeight: 1, color: b.ink }}>{b.icon}</div>
                 <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: vmin(18), color: b.ink }}>{b.label}</div>
               </div>
             ))}
           </div>
           <div
-            onMouseDown={onGoDown}
-            onMouseUp={onGoUp}
-            onMouseLeave={onGoUp}
-            onTouchStart={e => { e.preventDefault(); onGoDown(); }}
-            onTouchEnd={onGoUp}
-            onTouchCancel={onGoUp}
+            {...pressOnce(onGoDown, onGoUp)}
             style={{ minHeight: vmin(84), borderRadius: 'var(--radius-pill)', background: rbGoBg, boxShadow: `0 ${vmin(8)} 0 ${rbGoShadow}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'background 150ms', padding: `${vmin(10)} ${vmin(24)}`, touchAction: 'none' }}
           >
             <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: vmin(26), lineHeight: 1.2, color: 'var(--seasalt)', textAlign: 'center' }}>{rbGoText}</div>

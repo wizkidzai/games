@@ -244,7 +244,7 @@ export default class App extends Component<Record<string, never>, AppState> {
     });
 
     return (
-      <div style={{ position: 'fixed', inset: 0, background: s.screen === 'attract' ? 'var(--peacock-500)' : 'var(--peacock-800)', overflow: 'hidden', fontFamily: 'var(--font-body)', userSelect: 'none' }}>
+      <div onContextMenu={e => e.preventDefault()} style={{ position: 'fixed', inset: 0, background: s.screen === 'attract' ? 'var(--peacock-500)' : 'var(--peacock-800)', overflow: 'hidden', fontFamily: 'var(--font-body)', userSelect: 'none', WebkitTouchCallout: 'none' }}>
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
 
           {s.screen === 'attract' && (

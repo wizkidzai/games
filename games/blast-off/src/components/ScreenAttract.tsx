@@ -2,6 +2,7 @@
 // out the countdown and it starts on its own.
 
 import { useEffect, useRef, useState } from 'react';
+import { tapOnce } from '@wizkidz/game-utils';
 
 // Sizes are expressed in vmin (1vmin = 1% of the shorter screen edge) so every
 // screen fills the actual display instead of scaling a fixed-aspect canvas
@@ -35,9 +36,9 @@ export default function ScreenAttract({ onPress, gameTitle, gameTag, mascotSrc, 
 
   return (
     <div
-      onClick={onPress}
+      {...tapOnce(onPress)}
       style={{
-        position: 'absolute', inset: 0, cursor: 'pointer',
+        position: 'absolute', inset: 0, cursor: 'pointer', touchAction: 'none',
         background: `radial-gradient(${vmin(1100)} ${vmin(700)} at 20% -10%, rgba(10,164,235,0.25), transparent 70%),
                      radial-gradient(${vmin(900)} ${vmin(700)} at 85% 115%, rgba(163,0,120,0.3), transparent 70%),
                      var(--peacock-500)`,

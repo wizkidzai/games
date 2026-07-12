@@ -1,3 +1,5 @@
+import { tapOnce } from '@wizkidz/game-utils';
+
 // See ScreenAttract.tsx for why sizes are expressed in vmin via this helper.
 const vmin = (px: number) => `${(px / 10.8).toFixed(2)}vmin`;
 
@@ -17,11 +19,11 @@ interface Props {
 export default function ScreenReaction({ onPress, rBg, scoreText, rDots, rocketY, rBigText, rSubText, rTextAnim }: Props) {
   return (
     <div
-      onClick={onPress}
+      {...tapOnce(onPress)}
       style={{
         position: 'absolute', inset: 0, background: rBg, transition: 'background 150ms',
         display: 'flex', flexDirection: 'column', alignItems: 'center',
-        padding: `${vmin(44)} ${vmin(60)} ${vmin(160)}`, cursor: 'pointer',
+        padding: `${vmin(44)} ${vmin(60)} ${vmin(160)}`, cursor: 'pointer', touchAction: 'none',
       }}
     >
       <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

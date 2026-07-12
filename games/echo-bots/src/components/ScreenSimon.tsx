@@ -1,3 +1,5 @@
+import { tapOnce } from '@wizkidz/game-utils';
+
 // See ScreenAttract.tsx for why sizes are expressed in vmin via this helper.
 const vmin = (px: number) => `${(px / 10.8).toFixed(2)}vmin`;
 
@@ -44,12 +46,12 @@ export default function ScreenSimon({ scoreText, sRoundText, sStatus, sPads }: P
           {sPads.map((p, i) => (
             <div
               key={i}
-              onClick={p.tap}
+              {...tapOnce(p.tap)}
               style={{
                 width: vmin(240), height: vmin(240), borderRadius: '50%', background: p.bg, boxShadow: p.glow,
                 display: 'flex', alignItems: 'flex-end', justifyContent: 'center', overflow: 'hidden',
                 transform: `scale(${p.scl})`, transition: 'transform 120ms var(--ease-out), background 120ms, box-shadow 120ms',
-                cursor: 'pointer', border: `${vmin(9)} solid rgba(255,255,255,0.25)`,
+                cursor: 'pointer', border: `${vmin(9)} solid rgba(255,255,255,0.25)`, touchAction: 'none',
               }}
             >
               <img

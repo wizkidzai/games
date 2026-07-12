@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { tapOnce } from '@wizkidz/game-utils';
 
 // See ScreenAttract.tsx for why sizes are expressed in vmin via this helper.
 const vmin = (px: number) => `${(px / 10.8).toFixed(2)}vmin`;
@@ -31,7 +32,7 @@ export default function ButtonLegend({ legend }: Props) {
         style={{ position: 'absolute', left: vmin(32), top: '50%', transform: 'translateY(-50%)', height: vmin(48) }}
       />
       {legend.map((b, i) => (
-        <div key={i} onClick={b.tap} style={{ display: 'flex', alignItems: 'center', gap: vmin(16), cursor: 'pointer' }}>
+        <div key={i} {...tapOnce(b.tap)} style={{ display: 'flex', alignItems: 'center', gap: vmin(16), cursor: 'pointer', touchAction: 'none' }}>
           <div style={{
             width: vmin(b.size), height: vmin(b.size), borderRadius: '50%',
             background: b.c, boxShadow: `0 ${vmin(6)} 0 ${b.cDark}`,

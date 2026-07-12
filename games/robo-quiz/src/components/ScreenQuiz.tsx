@@ -1,3 +1,4 @@
+import { tapOnce } from '@wizkidz/game-utils';
 import ProgressBar from './ProgressBar';
 
 // See ScreenAttract.tsx for why sizes are expressed in vmin via this helper.
@@ -43,7 +44,7 @@ export default function ScreenQuiz({
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: vmin(24) }}>
           {quizOpts.map((opt, i) => (
-            <div key={i} onClick={opt.pick} style={{ background: opt.bg, border: `${vmin(6)} solid ${opt.c}`, borderRadius: 'var(--radius-lg)', padding: `${vmin(26)} ${vmin(16)} ${vmin(24)}`, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: vmin(16), cursor: 'pointer', boxShadow: 'var(--shadow-sm)', transform: `scale(${opt.scale})`, transition: 'transform 150ms var(--ease-bounce), background 150ms' }}>
+            <div key={i} {...tapOnce(opt.pick)} style={{ background: opt.bg, border: `${vmin(6)} solid ${opt.c}`, borderRadius: 'var(--radius-lg)', padding: `${vmin(26)} ${vmin(16)} ${vmin(24)}`, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: vmin(16), cursor: 'pointer', boxShadow: 'var(--shadow-sm)', transform: `scale(${opt.scale})`, transition: 'transform 150ms var(--ease-bounce), background 150ms', touchAction: 'none' }}>
               <div style={{ width: vmin(58), height: vmin(58), borderRadius: '50%', background: opt.c, boxShadow: `0 ${vmin(6)} 0 ${opt.cDark}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.9)', fontSize: vmin(24) }}>{opt.glyph}</div>
               <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: vmin(32), color: opt.textC, textAlign: 'center', lineHeight: 1.15 }}>{opt.t}</div>
             </div>

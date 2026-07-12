@@ -390,7 +390,7 @@ export default class App extends Component<Record<string, never>, AppState> {
           : 'Add steps first!';
 
     return (
-      <div style={{ position: 'fixed', inset: 0, background: 'var(--seasalt)', overflow: 'hidden', fontFamily: 'var(--font-body)', userSelect: 'none' }}>
+      <div onContextMenu={e => e.preventDefault()} style={{ position: 'fixed', inset: 0, background: 'var(--seasalt)', overflow: 'hidden', fontFamily: 'var(--font-body)', userSelect: 'none', WebkitTouchCallout: 'none' }}>
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
             {s.screen === 'attract' && <ScreenAttract onPress={() => this.press('A')} gameTitle={GAME_TITLE} gameTag={GAME_TAG} mascotSrc={MASCOT_SRC} themeColor={THEME_COLOR} countdownSeconds={CONFIG.attractCountdownSeconds} />}
             {s.screen === 'robot' && (
